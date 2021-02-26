@@ -1,6 +1,6 @@
 import sys
 # Add the StyleGAN folder to Python so that you can import it.
-# sys.path.insert(0, "/Users/jimenalozano/IdeaProjects/face-generator/stylegan2")
+sys.path.insert(0, "../stylegan2")
 
 # Copyright (c) 2019, NVIDIA Corporation. All rights reserved.
 #
@@ -14,15 +14,17 @@ from stylegan2 import dnnlib
 from stylegan2.dnnlib import tflib
 from stylegan2 import pretrained_networks
 
-#----------------------------------------------------------------------------
+
+# ----------------------------------------------------------------------------
 
 def expand_seed(seeds, vector_size):
-  result = []
+    result = []
 
-  for seed in seeds:
-    rnd = np.random.RandomState(seed)
-    result.append( rnd.randn(1, vector_size) )
-  return result
+    for seed in seeds:
+        rnd = np.random.RandomState(seed)
+        result.append(rnd.randn(1, vector_size))
+    return result
+
 
 def generate_images(Gs, seeds, truncation_psi, path):
     noise_vars = [var for name, var in \
@@ -31,7 +33,7 @@ def generate_images(Gs, seeds, truncation_psi, path):
 
     Gs_kwargs = dnnlib.EasyDict()
     Gs_kwargs.output_transform = dict(func= \
-        tflib.convert_images_to_uint8, nchw_to_nhwc=True)
+                                          tflib.convert_images_to_uint8, nchw_to_nhwc=True)
     Gs_kwargs.randomize_noise = False
     if truncation_psi is not None:
         Gs_kwargs.truncation_psi = truncation_psi
@@ -40,16 +42,17 @@ def generate_images(Gs, seeds, truncation_psi, path):
         print('Generating image for seed %d/%d ...' % (seed_idx, len(seeds)))
         rnd = np.random.RandomState()
         tflib.set_vars({var: rnd.randn(*var.shape.as_list()) \
-                        for var in noise_vars}) # [height, width]
+                        for var in noise_vars})  # [height, width]
         images = Gs.run(seed, None, **Gs_kwargs)
         # [minibatch, height, width, channel]
         image_path = path + f"/image{seed_idx}.png"
         PIL.Image.fromarray(images[0], 'RGB').save(image_path)
 
+
 def transition(Gs, seed, steps, path):
     # range(8192,8300)
     vector_size = Gs.input_shape[1:][0]
-    seeds = expand_seed( [seed+1,seed+9], vector_size)
+    seeds = expand_seed([seed + 1, seed + 9], vector_size)
     # generate_images(Gs, seeds,truncation_psi=0.5)
     print(seeds[0].shape)
 
@@ -61,22 +64,23 @@ def transition(Gs, seed, steps, path):
 
     seeds2 = []
     for i in range(steps):
-      seeds2.append(current)
-      current = current + step
+        seeds2.append(current)
+        current = current + step
 
     generate_images(Gs, seeds2, truncation_psi=0.5, path=path)
 
     # To view these generate images as a video file
     # ffmpeg -r 30 -i image%d.png -vcodec mpeg4 -y movie.mp4
 
+
 def add_noise(Gs, seed, path):
     vector_size = Gs.input_shape[1:][0]
-    seeds = expand_seed( [seed, seed, seed, seed, seed], vector_size)
-    generate_images(Gs, seeds,truncation_psi=0.5, path=path)
+    seeds = expand_seed([seed, seed, seed, seed, seed], vector_size)
+    generate_images(Gs, seeds, truncation_psi=0.5, path=path)
+
 
 def main():
-
-    #----------------------------------------------------------------------------
+    # ----------------------------------------------------------------------------
     #   Generating random images
     sc = dnnlib.SubmitConfig()
     sc.num_gpus = 1
@@ -89,26 +93,28 @@ def main():
     print('Loading networks from "%s"...' % network_pkl)
     _G, _D, Gs = pretrained_networks.load_networks(network_pkl)
     vector_size = Gs.input_shape[1:][0]
-    seeds = expand_seed( range(8000,8020), vector_size)
+    seeds = expand_seed(range(8000, 8020), vector_size)
     print("Generating random images")
-    generate_images(Gs, seeds, truncation_psi=0.5, path="/content/drive/My Drive/Proyecto Final/Face Generator/results/")
+    generate_images(Gs, seeds, truncation_psi=0.5,
+                    path="/content/drive/My Drive/Proyecto Final/Face Generator/results/")
 
-    #----------------------------------------------------------------------------
+    # ----------------------------------------------------------------------------
     #   Examining the latent space
     print("Examining the latent space")
     sc.run_dir_root = "/content/drive/My Drive/Proyecto Final/Face Generator/results/latent-space"
-    transition(Gs, seed=8192, steps=300, path="/content/drive/My Drive/Proyecto Final/Face Generator/results/latent-space")
+    transition(Gs, seed=8192, steps=300,
+               path="/content/drive/My Drive/Proyecto Final/Face Generator/results/latent-space")
 
-    #----------------------------------------------------------------------------
+    # ----------------------------------------------------------------------------
     #   Adding noise
     print("Adding noise")
     sc.run_dir_root = "/content/drive/My Drive/Proyecto Final/Face Generator/results/noise"
     add_noise(Gs, seed=500, path="/content/drive/My Drive/Proyecto Final/Face Generator/results/noise")
 
 
-#----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 
 if __name__ == "__main__":
     main()
 
-#----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
