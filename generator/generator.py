@@ -10,9 +10,9 @@ sys.path.insert(0, "../stylegan2")
 
 import numpy as np
 import PIL.Image
-from stylegan2 import dnnlib
-from stylegan2.dnnlib import tflib
-from stylegan2 import pretrained_networks
+import dnnlib
+import dnnlib.tflib as tflib
+import pretrained_networks
 
 
 # ----------------------------------------------------------------------------
