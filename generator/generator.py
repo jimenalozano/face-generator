@@ -1,7 +1,7 @@
 import sys
 
 # Add the StyleGAN folder to Python so that you can import it.
-sys.path.insert(0, "/Users/jimenalozano/IdeaProjects/face-generator/stylegan2")
+sys.path.insert(0, "/home/jilozano/face-generator/stylegan2")
 
 # Copyright (c) 2019, NVIDIA Corporation. All rights reserved.
 #
