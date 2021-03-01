@@ -1,7 +1,7 @@
 import sys
 
 # Add the StyleGAN folder to Python so that you can import it.
-sys.path.insert(0, "/home/jilozano/face-generator/stylegan2")
+sys.path.insert(0, "/home/jilozano/face-generator/stylegan2/dnnlib")
 
 # Copyright (c) 2019, NVIDIA Corporation. All rights reserved.
 #
@@ -13,8 +13,8 @@ import numpy as np
 
 import PIL.Image
 
-import dnnlib
-import dnnlib.tflib as tflib
+# import dnnlib
+# import dnnlib.tflib as tflib
 
 import pretrained_networks
 
