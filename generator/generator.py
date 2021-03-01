@@ -90,7 +90,7 @@ def main():
     sc.num_gpus = 1
     sc.submit_target = dnnlib.SubmitTarget.LOCAL
     sc.local.do_not_copy_source_files = True
-    sc.run_dir_root = "/content/drive/My Drive/Proyecto Final/Face Generator/results/"
+    sc.run_dir_root = "../results/"
     sc.run_desc = 'generate-images'
     network_pkl = 'gdrive:networks/stylegan2-ffhq-config-f.pkl'
 
@@ -100,20 +100,20 @@ def main():
     seeds = expand_seed(range(8000, 8020), vector_size)
     print("Generating random images")
     generate_images(Gs, seeds, truncation_psi=0.5,
-                    path="/content/drive/My Drive/Proyecto Final/Face Generator/results/")
+                    path="../results/")
 
     # ----------------------------------------------------------------------------
     #   Examining the latent space
     print("Examining the latent space")
-    sc.run_dir_root = "/content/drive/My Drive/Proyecto Final/Face Generator/results/latent-space"
+    sc.run_dir_root = "../results/latent-space"
     transition(Gs, seed=8192, steps=300,
-               path="/content/drive/My Drive/Proyecto Final/Face Generator/results/latent-space")
+               path="../results/latent-space")
 
     # ----------------------------------------------------------------------------
     #   Adding noise
     print("Adding noise")
-    sc.run_dir_root = "/content/drive/My Drive/Proyecto Final/Face Generator/results/noise"
-    add_noise(Gs, seed=500, path="/content/drive/My Drive/Proyecto Final/Face Generator/results/noise")
+    sc.run_dir_root = "../results/noise"
+    add_noise(Gs, seed=500, path="../results/noise")
 
 
 # ----------------------------------------------------------------------------
