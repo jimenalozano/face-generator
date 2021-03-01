@@ -10,7 +10,7 @@ sudo apt-get install virtualenv
 
 After that, create a virtual environment
 ```bash
-virtualenv venv --python=python3
+virtualenv venv --python=python3.6
 ```
 This should create a venv folder. Activate it by running
 ```bash
