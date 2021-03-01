@@ -1,4 +1,5 @@
 import sys
+
 # Add the StyleGAN folder to Python so that you can import it.
 sys.path.insert(0, "../stylegan2")
 
@@ -9,9 +10,12 @@ sys.path.insert(0, "../stylegan2")
 # https://nvlabs.github.io/stylegan2/license.html
 
 import numpy as np
+
 import PIL.Image
-import stylegan2.dnnlib as dnnlib
+
+import dnnlib
 import dnnlib.tflib as tflib
+
 import pretrained_networks
 
 
