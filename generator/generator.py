@@ -9,7 +9,7 @@ sys.path.insert(0, "../stylegan2")
 # https://nvlabs.github.io/stylegan2/license.html
 
 import numpy as np
-import Image
+import PIL.Image
 import dnnlib
 import dnnlib.tflib as tflib
 import pretrained_networks
