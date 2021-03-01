@@ -16,7 +16,7 @@ import PIL.Image
 # import dnnlib
 # import dnnlib.tflib as tflib
 
-import pretrained_networks
+# import pretrained_networks
 
 
 # ----------------------------------------------------------------------------
