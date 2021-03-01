@@ -1,6 +1,6 @@
 import sys
 # Add the StyleGAN folder to Python so that you can import it.
-sys.path.insert(0, "../stylegan2-master")
+sys.path.insert(0, "../stylegan2")
 
 # Copyright (c) 2019, NVIDIA Corporation. All rights reserved.
 #
@@ -10,7 +10,7 @@ sys.path.insert(0, "../stylegan2-master")
 
 import numpy as np
 import PIL.Image
-import stylegan2-master.dnnlib as dnnlib
+import stylegan2.dnnlib as dnnlib
 import dnnlib.tflib as tflib
 import pretrained_networks
 
