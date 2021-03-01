@@ -49,7 +49,7 @@ def generate_images(Gs, seeds, truncation_psi, path):
                         for var in noise_vars})  # [height, width]
         images = Gs.run(seed, None, **Gs_kwargs)
         # [minibatch, height, width, channel]
-        image_path = path + f"/image{seed_idx}.png"
+        image_path = path + f'/image{seed_idx}.png'
         PIL.Image.fromarray(images[0], 'RGB').save(image_path)
 
 
