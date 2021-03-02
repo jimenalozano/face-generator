@@ -90,7 +90,7 @@ def main():
     sc.num_gpus = 1
     sc.submit_target = dnnlib.SubmitTarget.LOCAL
     sc.local.do_not_copy_source_files = True
-    sc.run_dir_root = "../results/"
+    sc.run_dir_root = "../results"
     sc.run_desc = 'generate-images'
     network_pkl = 'gdrive:networks/stylegan2-ffhq-config-f.pkl'
 
@@ -100,7 +100,7 @@ def main():
     seeds = expand_seed(range(8000, 8020), vector_size)
     print("Generating random images")
     generate_images(Gs, seeds, truncation_psi=0.5,
-                    path="../results/")
+                    path="../results")
 
     # ----------------------------------------------------------------------------
     #   Examining the latent space
