@@ -20,10 +20,17 @@ Install the dependencies
 ```bash
 pip install -r requirements.txt
 ```
-Finally, you are ready to go!! Run the face generator
+Check hardware requirements are OK
 ```bash
 python cli/cli.py
 ```
+Finally, you are ready to go!! Run the face generator
+```bash
+cd generator
+python generator.py
+```
+
+You can see the results at face-generator/results/
 
 Once you are all done, get out of the virtual environment by running
 ```bash
