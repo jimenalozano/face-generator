@@ -1,6 +1,5 @@
-import sys
-
 # Add the StyleGAN folder to Python so that you can import it.
+# import sys
 # sys.path.insert(0, "../stylegan2/")
 
 # Copyright (c) 2019, NVIDIA Corporation. All rights reserved.
