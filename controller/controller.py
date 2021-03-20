@@ -7,8 +7,7 @@ import dnnlib
 import dnnlib.tflib as tfli
 import pretrained_networks
 
-from generator import generator
-
+from generator.generator import Generator
 
 def main():
     # ----------------------------------------------------------------------------
@@ -24,23 +23,23 @@ def main():
     print('Loading networks from "%s"...' % network_pkl)
     _G, _D, Gs = pretrained_networks.load_networks(network_pkl)
     vector_size = Gs.input_shape[1:][0]
-    seeds = generator.expand_seed(range(8000, 8020), vector_size)
+    seeds = Generator.expand_seed(range(8000, 8020), vector_size)
     print("Generating random images")
-    generator.generate_images(Gs, seeds, truncation_psi=0.5,
+    Generator.generate_images(Gs, seeds, truncation_psi=0.5,
                     path="../results")
 
     # ----------------------------------------------------------------------------
     #   Examining the latent space
     print("Examining the latent space")
     sc.run_dir_root = "../results/latent-space"
-    generator.transition(Gs, seed=8192, steps=300,
+    Generator.transition(Gs, seed=8192, steps=300,
                path="../results/latent-space")
 
     # ----------------------------------------------------------------------------
     #   Adding noise
     print("Adding noise")
     sc.run_dir_root = "../results/noise"
-    generator.add_noise(Gs, seed=500, path="../results/noise")
+    Generator.add_noise(Gs, seed=500, path="../results/noise")
 
 
 if __name__ == "__main__":
