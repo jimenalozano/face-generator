@@ -1,7 +1,7 @@
 import sys
 
 # Add the StyleGAN folder to Python so that you can import it.
-sys.path.insert(0, "/home/jilozano/face-generator/stylegan2/")
+sys.path.insert(0, "../stylegan2/")
 
 # Copyright (c) 2019, NVIDIA Corporation. All rights reserved.
 #
@@ -18,8 +18,6 @@ import dnnlib.tflib as tflib
 
 import pretrained_networks
 
-
-# ----------------------------------------------------------------------------
 
 def expand_seed(seeds, vector_size):
     result = []
@@ -81,44 +79,3 @@ def add_noise(Gs, seed, path):
     vector_size = Gs.input_shape[1:][0]
     seeds = expand_seed([seed, seed, seed, seed, seed], vector_size)
     generate_images(Gs, seeds, truncation_psi=0.5, path=path)
-
-
-def main():
-    # ----------------------------------------------------------------------------
-    #   Generating random images
-    sc = dnnlib.SubmitConfig()
-    sc.num_gpus = 1
-    sc.submit_target = dnnlib.SubmitTarget.LOCAL
-    sc.local.do_not_copy_source_files = True
-    sc.run_dir_root = "../results"
-    sc.run_desc = 'generate-images'
-    network_pkl = 'gdrive:networks/stylegan2-ffhq-config-f.pkl'
-
-    print('Loading networks from "%s"...' % network_pkl)
-    _G, _D, Gs = pretrained_networks.load_networks(network_pkl)
-    vector_size = Gs.input_shape[1:][0]
-    seeds = expand_seed(range(8000, 8020), vector_size)
-    print("Generating random images")
-    generate_images(Gs, seeds, truncation_psi=0.5,
-                    path="../results")
-
-    # ----------------------------------------------------------------------------
-    #   Examining the latent space
-    print("Examining the latent space")
-    sc.run_dir_root = "../results/latent-space"
-    transition(Gs, seed=8192, steps=300,
-               path="../results/latent-space")
-
-    # ----------------------------------------------------------------------------
-    #   Adding noise
-    print("Adding noise")
-    sc.run_dir_root = "../results/noise"
-    add_noise(Gs, seed=500, path="../results/noise")
-
-
-# ----------------------------------------------------------------------------
-
-if __name__ == "__main__":
-    main()
-
-# ----------------------------------------------------------------------------
