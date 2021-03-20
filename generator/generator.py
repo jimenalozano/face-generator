@@ -1,18 +1,9 @@
-# Add the StyleGAN folder to Python so that you can import it.
-# import sys
-# sys.path.insert(0, "../stylegan2/")
-
-# Copyright (c) 2019, NVIDIA Corporation. All rights reserved.
-#
-# This work is made available under the Nvidia Source Code License-NC.
-# To view a copy of this license, visit
-# https://nvlabs.github.io/stylegan2/license.html
-
 import numpy as np
 import PIL.Image
 
 import stylegan2.dnnlib as dnnlib
 import stylegan2.dnnlib.tflib as tflib
+
 
 class Generator:
 
