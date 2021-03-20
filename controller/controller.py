@@ -1,7 +1,6 @@
 import sys
 
-sys.path.insert(0, "../stylegan2/")
-sys.path.insert(0, "../generator/")
+sys.path.insert(0, "stylegan2/")
 
 import dnnlib
 import dnnlib.tflib as tfli
