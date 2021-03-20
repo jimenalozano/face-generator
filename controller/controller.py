@@ -1,5 +1,7 @@
-import stylegan2.dnnlib as dnnlib
-from generator.generator import Generator
+import sys
+sys.path.insert(0, "../stylegan2/")
+sys.path.insert(0, "../generator/")
+import Generator from generator
 
 def main():
     # ----------------------------------------------------------------------------
