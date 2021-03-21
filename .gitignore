@@ -24,3 +24,6 @@ hs_err_pid*
 
 # Virtual environment
 venv/
+
+# stylegan2
+.stylegan2-cache

@@ -1,5 +1,5 @@
 from generator.generator import Generator
-from stylegan2 import dnnlib
+from stylegan2 import dnnlib, pretrained_networks
 
 
 def main():
@@ -14,7 +14,7 @@ def main():
     network_pkl = 'gdrive:networks/stylegan2-ffhq-config-f.pkl'
 
     print('Loading networks from "%s"...' % network_pkl)
-    _G, _D, Gs = dnnlib.pretrained_networks.load_networks(network_pkl)
+    _G, _D, Gs = pretrained_networks.load_networks(network_pkl)
     vector_size = Gs.input_shape[1:][0]
     seeds = Generator.expand_seed(range(8000, 8020), vector_size)
     print("Generating random images")
