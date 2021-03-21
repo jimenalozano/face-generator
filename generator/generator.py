@@ -1,4 +1,5 @@
 import sys
+
 sys.path.insert(0, "../stylegan2")
 
 import numpy as np

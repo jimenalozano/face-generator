@@ -1,4 +1,5 @@
 import sys
+
 sys.path.insert(0, "../generator")
 
 from generator import Generator
@@ -19,6 +20,7 @@ def main():
     #   Adding noise
     print("Adding noise")
     generator.generate_noise(seed=500)
+
 
 if __name__ == "__main__":
     main()
