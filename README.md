@@ -26,8 +26,8 @@ python cli/cli.py
 ```
 Finally, you are ready to go!! Run the face generator
 ```bash
-cd generator
-python generator.py
+cd controller
+python controller.py
 ```
 
 You can see the results at face-generator/results/
