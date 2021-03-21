@@ -1,11 +1,36 @@
+import sys
+sys.path.insert(0, "../stylegan2")
+
 import numpy as np
 import PIL.Image
 
-import stylegan2.dnnlib as dnnlib
-import stylegan2.dnnlib.tflib as tflib
+import dnnlib
+import dnnlib.tflib as tflib
+import pretrained_networks
 
 
 class Generator:
+
+    def __init__(self, num_gpus, results_dir_root, network_pkl):
+        self.results_dir_root = results_dir_root
+        sc = dnnlib.SubmitConfig()
+        sc.num_gpus = num_gpus
+        sc.submit_target = dnnlib.SubmitTarget.LOCAL
+        sc.local.do_not_copy_source_files = True
+        sc.run_dir_root = results_dir_root
+        sc.run_desc = 'generate-images'
+        self.sc = sc
+        self.network_pkl = network_pkl
+
+        print('Loading networks from "%s"...' % self.network_pkl)
+        self._G, self._D, self.Gs = pretrained_networks.load_networks(self.network_pkl)
+
+    def generate_random_images(self):
+        vector_size = self.Gs.input_shape[1:][0]
+        seeds = Generator.expand_seed(range(8000, 8020), vector_size)
+        print("Generating random images")
+        Generator.generate_images(self.Gs, seeds, truncation_psi=0.5,
+                                  path=self.results_dir_root)
 
     @staticmethod
     def expand_seed(seeds, vector_size):
