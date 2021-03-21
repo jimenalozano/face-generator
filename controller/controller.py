@@ -12,17 +12,13 @@ def main():
 
     # ----------------------------------------------------------------------------
     #   Examining the latent space
-    # print("Examining the latent space")
-    # sc.run_dir_root = "../results/latent-space"
-    # Generator.transition(Gs, seed=8192, steps=300,
-    #            path="../results/latent-space")
+    print("Examining the latent space")
+    generator.generate_transition(seed=8192, steps=300)
 
     # ----------------------------------------------------------------------------
     #   Adding noise
-    # print("Adding noise")
-    # sc.run_dir_root = "../results/noise"
-    # Generator.add_noise(Gs, seed=500, path="../results/noise")
-
+    print("Adding noise")
+    generator.generate_noise(seed=500)
 
 if __name__ == "__main__":
     main()

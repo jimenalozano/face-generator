@@ -32,6 +32,15 @@ class Generator:
         Generator.generate_images(self.Gs, seeds, truncation_psi=0.5,
                                   path=self.results_dir_root)
 
+    def generate_noise(self, seed):
+        self.sc.run_dir_root = self.sc.run_dir_root + "/noise"
+        Generator.noise(self.Gs, seed=seed, path=self.sc.run_dir_root)
+
+    def generate_transition(self, seed, steps):
+        self.sc.run_dir_root = self.sc.run_dir_root + "/latent-space"
+        Generator.transition(self.Gs, seed=seed, steps=steps,
+                             path=self.sc.run_dir_root)
+
     @staticmethod
     def expand_seed(seeds, vector_size):
         result = []
@@ -89,7 +98,7 @@ class Generator:
         # ffmpeg -r 30 -i image%d.png -vcodec mpeg4 -y movie.mp4
 
     @staticmethod
-    def add_noise(Gs, seed, path):
+    def noise(Gs, seed, path):
         vector_size = Gs.input_shape[1:][0]
         seeds = Generator.expand_seed([seed, seed, seed, seed, seed], vector_size)
         Generator.generate_images(Gs, seeds, truncation_psi=0.5, path=path)
