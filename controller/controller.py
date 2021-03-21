@@ -1,5 +1,8 @@
-from generator.generator import Generator
+import sys
+sys.path.append('../stylegan2/')
+
 from stylegan2 import dnnlib, pretrained_networks
+from generator import Generator
 
 
 def main():
