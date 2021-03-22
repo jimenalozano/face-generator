@@ -26,10 +26,14 @@ class Generator:
         print('Loading networks from "%s"...' % self.network_pkl)
         self._G, self._D, self.Gs = pretrained_networks.load_networks(self.network_pkl)
 
+        noise_vars = [var for name, var in \
+                      self.Gs.components.synthesis.vars.items()]
+
+        print(noise_vars)
+
     def generate_random_images(self):
         vector_size = self.Gs.input_shape[1:][0]
         seeds = Generator.expand_seed(range(8000, 8020), vector_size)
-        print("Generating random images")
         Generator.generate_images(self.Gs, seeds, truncation_psi=0.5,
                                   path=self.results_dir_root)
 

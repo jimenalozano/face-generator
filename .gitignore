@@ -26,7 +26,7 @@ hs_err_pid*
 venv/
 
 # stylegan2
-.stylegan2-cache
+/.stylegan2-cache/
 
 # Packages
 controller/__pycache__
