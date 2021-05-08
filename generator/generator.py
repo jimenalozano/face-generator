@@ -43,7 +43,7 @@ class Generator:
         Generator.noise(self.Gs, seed=seed, path=noise_path)
 
     def generate_transition(self, seed, steps):
-        transition_path = self.results_dir_root + "/latent-space"
+        transition_path = self.results_dir_root + "/transition"
         self.sc.run_dir_root = transition_path
         Generator.transition(self.Gs, seed=seed, steps=steps,
                              path=transition_path)

@@ -27,7 +27,9 @@ venv/
 
 # stylegan2
 /.stylegan2-cache/
+*/.stylegan2-cache/
 
 # Packages
 controller/__pycache__
 generator/__pycache__
+
