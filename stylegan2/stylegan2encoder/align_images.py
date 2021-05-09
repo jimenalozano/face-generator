@@ -16,6 +16,17 @@ def unpack_bz2(src_path):
     return dst_path
 
 
+def align_images(raw_images_dir: str, aligned_images_dir: str):
+    landmarks_detector = LandmarksDetector(landmarks_model_path)
+    for img_name in [f for f in os.listdir(raw_images_dir) if f[0] not in '._']:
+        raw_img_path = os.path.join(raw_images_dir, img_name)
+        for i, face_landmarks in enumerate(landmarks_detector.get_landmarks(raw_img_path), start=1):
+            face_img_name = '%s_%02d.png' % (os.path.splitext(img_name)[0], i)
+            aligned_face_path = os.path.join(aligned_images_dir, face_img_name)
+            os.makedirs(aligned_images_dir, exist_ok=True)
+            image_align(raw_img_path, aligned_face_path, face_landmarks)
+
+
 if __name__ == "__main__":
     """
     Extracts and aligns all faces from images using DLib and a function from original FFHQ dataset preparation step
@@ -24,14 +35,8 @@ if __name__ == "__main__":
 
     landmarks_model_path = unpack_bz2(get_file('shape_predictor_68_face_landmarks.dat.bz2',
                                                LANDMARKS_MODEL_URL, cache_subdir='temp'))
+
     RAW_IMAGES_DIR = sys.argv[1]
     ALIGNED_IMAGES_DIR = sys.argv[2]
 
-    landmarks_detector = LandmarksDetector(landmarks_model_path)
-    for img_name in [f for f in os.listdir(RAW_IMAGES_DIR) if f[0] not in '._']:
-        raw_img_path = os.path.join(RAW_IMAGES_DIR, img_name)
-        for i, face_landmarks in enumerate(landmarks_detector.get_landmarks(raw_img_path), start=1):
-            face_img_name = '%s_%02d.png' % (os.path.splitext(img_name)[0], i)
-            aligned_face_path = os.path.join(ALIGNED_IMAGES_DIR, face_img_name)
-            os.makedirs(ALIGNED_IMAGES_DIR, exist_ok=True)
-            image_align(raw_img_path, aligned_face_path, face_landmarks)
+    align_images(RAW_IMAGES_DIR, ALIGNED_IMAGES_DIR)
