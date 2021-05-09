@@ -13,7 +13,7 @@ from enum import Enum
 import numpy as np
 from generator import Generator
 
-RAW_IMAGES_PATH = '../results/'
+RAW_IMAGES_PATH = '../results/latent-space/raw-images/'
 ALIGNED_IMAGES_PATH = '../results/latent-space/aligned-images/'
 GENERATED_IMAGES_PATH = '../results/latent-space/generated_images/'
 LATENT_REP_PATH = '../results/latent-space/latent-representation/'
@@ -43,7 +43,7 @@ class LatentSpace:
 
         # Configure the generator
         self.truncation_psi = 0.5
-        self.w_avg = self.generator.Gs.Gs_network.get_var('dlatent_avg')
+        self.w_avg = self.generator.Gs.get_var('dlatent_avg')
         self.noise_vars = [var for name, var in self.generator.Gs.components.synthesis.vars.items() if
                            name.startswith('noise')]
         Gs_syn_kwargs = dnnlib.EasyDict()
