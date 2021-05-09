@@ -7,8 +7,8 @@ import numpy as np
 import dnnlib
 import dnnlib.tflib as tflib
 import pretrained_networks
-from encoder.generator_model import Generator
-from encoder.perceptual_model import PerceptualModel
+from stylegan2encoder.encoder.generator_model import Generator
+from stylegan2encoder.encoder.perceptual_model import PerceptualModel
 
 
 def split_to_batches(l, n):
