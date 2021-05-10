@@ -1,16 +1,16 @@
 import sys
 
-sys.path.insert(0, "../stylegan2")
+sys.path.insert(0, "../stylegan2encoder")
 
 import os
 import PIL.Image
 import dnnlib
 import dnnlib.tflib as tflib
-from stylegan2encoder.align_images import align_images
-from stylegan2encoder.encode_images import encode_images
 from enum import Enum
 import numpy as np
 from generator import Generator
+from align_images import align_images
+from encode_images import encode_images
 
 RAW_IMAGES_PATH = '../results/latent-space/raw-images/'
 ALIGNED_IMAGES_PATH = '../results/latent-space/aligned-images/'
@@ -59,7 +59,7 @@ class LatentSpace:
     def encode_faces(self, aligned_images=ALIGNED_IMAGES_PATH, generated_images=GENERATED_IMAGES_PATH,
                      latent_representations=LATENT_REP_PATH, iterations=750, learning_rate=0.1) -> []:
         encode_images(aligned_images, generated_images,
-                      latent_representations, network_pkl=self.generator.network_pkl,
+                      latent_representations, self.generator.Gs,
                       image_size=1024, iterations=iterations, lr=learning_rate, batch_size=2)
         self.file_name = [f for f in os.listdir(LATENT_REP_PATH) if os.path.isfile(os.path.join(LATENT_REP_PATH, f))]
         return self.file_name
