@@ -6,8 +6,8 @@ import os
 import PIL.Image
 import dnnlib
 import dnnlib.tflib as tflib
-from align_images import align_images
-from encode_images import encode_images
+from stylegan2encoder.align_images import align_images
+from stylegan2encoder.encode_images import encode_images
 from enum import Enum
 import numpy as np
 from generator import Generator
