@@ -21,6 +21,7 @@ import traceback
 
 from enum import Enum
 
+import dnnlib
 from .. import util
 
 
@@ -96,7 +97,7 @@ class SubmitConfig(util.EasyDict):
         self.num_gpus = 1
         self.print_info = False
         self.nvprof = False
-        self.local = stylegan2encoder.dnnlib.submission.internal.local.TargetOptions()
+        self.local = dnnlib.submission.internal.local.TargetOptions()
         self.datasets = []
 
         # (automatically populated)
