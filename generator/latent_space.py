@@ -44,8 +44,10 @@ class LatentSpace:
         # Configure the generator
         self.truncation_psi = 0.5
         self.w_avg = self.generator.Gs.get_var('dlatent_avg')
+        print("acá?")
         self.noise_vars = [var for name, var in self.generator.Gs.components.synthesis.vars.items() if
                            name.startswith('noise')]
+        print("acá?")
         Gs_syn_kwargs = dnnlib.EasyDict()
         Gs_syn_kwargs.output_transform = dict(func=tflib.convert_images_to_uint8, nchw_to_nhwc=True)
         Gs_syn_kwargs.randomize_noise = False
@@ -69,6 +71,7 @@ class LatentSpace:
     # @intensity [-20, 20] with step = 0.2
     def modify_face(self, attribute: str, intensity: int, boost_intensity: bool, resolution=256):
         v = np.load(LATENT_REP_PATH + self.file_name[0])
+        print(self.file_name)
         v = np.array([v])
 
         direction_file = attribute + '.npy'
