@@ -100,7 +100,7 @@ if __name__ == '__main__':
     # generator.generate_random_images()
 
     # Paso 1: cargar las imágenes en la carpeta RAW y hacer el crop (alinearla)
-    # latentSpace.align_faces()
+    latentSpace.align_faces()
     print("Alignment ... done!")
 
     # Paso 2: entrenar la red y obtener la representación del espacio latente
