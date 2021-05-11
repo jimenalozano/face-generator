@@ -95,8 +95,9 @@ class LatentSpace:
 
 
 if __name__ == '__main__':
-    generator = Generator(1, 'results/latent-space', 'gdrive:networks/stylegan2-ffhq-config-f.pkl')
+    generator = Generator(1, 'results/latent-space/raw-images', 'gdrive:networks/stylegan2-ffhq-config-f.pkl')
     latentSpace = LatentSpace(generator)
+    generator.generate_random_images()
 
     # Paso 1: cargar las imágenes en la carpeta RAW y hacer el crop (alinearla)
     latentSpace.align_faces()
