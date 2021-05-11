@@ -44,10 +44,8 @@ class LatentSpace:
         # Configure the generator
         self.truncation_psi = 0.5
         self.w_avg = self.generator.Gs.get_var('dlatent_avg')
-        print("acá?")
         self.noise_vars = [var for name, var in self.generator.Gs.components.synthesis.vars.items() if
                            name.startswith('noise')]
-        print("acá?")
         Gs_syn_kwargs = dnnlib.EasyDict()
         Gs_syn_kwargs.output_transform = dict(func=tflib.convert_images_to_uint8, nchw_to_nhwc=True)
         Gs_syn_kwargs.randomize_noise = False
