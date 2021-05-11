@@ -16,6 +16,7 @@ RAW_IMAGES_PATH = 'results/latent-space/raw-images/'
 ALIGNED_IMAGES_PATH = 'results/latent-space/aligned-images/'
 GENERATED_IMAGES_PATH = 'results/latent-space/generated-images/'
 LATENT_REP_PATH = 'results/latent-space/latent-representation/'
+LATENT_DIRECTIONS_PATH = 'latent-directions/'
 
 
 class Adjustment(Enum):
@@ -43,8 +44,10 @@ class LatentSpace:
         # Configure the generator
         self.truncation_psi = 0.5
         self.w_avg = self.generator.Gs.get_var('dlatent_avg')
+        print("acá?")
         self.noise_vars = [var for name, var in self.generator.Gs.components.synthesis.vars.items() if
                            name.startswith('noise')]
+        print("acá?")
         Gs_syn_kwargs = dnnlib.EasyDict()
         Gs_syn_kwargs.output_transform = dict(func=tflib.convert_images_to_uint8, nchw_to_nhwc=True)
         Gs_syn_kwargs.randomize_noise = False
@@ -68,11 +71,12 @@ class LatentSpace:
     # @intensity [-20, 20] with step = 0.2
     def modify_face(self, attribute: str, intensity: int, boost_intensity: bool, resolution=256):
         v = np.load(LATENT_REP_PATH + self.file_name[0])
+        print(self.file_name)
         v = np.array([v])
 
         direction_file = attribute + '.npy'
 
-        os.rmdir(GENERATED_IMAGES_PATH + attribute)
+        # os.rmdir(GENERATED_IMAGES_PATH + attribute)
 
         if boost_intensity:
             intensity *= 3
@@ -81,7 +85,7 @@ class LatentSpace:
         return self.move_latent(v, direction_file, coeffs)
 
     def move_latent(self, latent_vector, direction_file, coeffs):
-        direction = np.load(LATENT_REP_PATH + direction_file)
+        direction = np.load(LATENT_DIRECTIONS_PATH + direction_file)
         os.makedirs(GENERATED_IMAGES_PATH + direction_file.split('.')[0], exist_ok=True)
         for i, coeff in enumerate(coeffs):
             new_latent_vector = latent_vector.copy()
@@ -103,13 +107,11 @@ if __name__ == '__main__':
 
     # Paso 2: entrenar la red y obtener la representación del espacio latente
     file_names = latentSpace.encode_faces()
-    print("Encoded file names: ")
-    [print(file_name) for file_name in file_names]
 
     # Paso 3: modificar la imagen
     # @attribute from Adjustment enum
     # @intensity [-20, 20] with step = 0.2
-    result = latentSpace.modify_face(Adjustment.AGE.value, 5, True)
+    result = latentSpace.modify_face(Adjustment.AGE.value, 5, False)
 
     # Paso 4: resultados en GENERATED-IMAGES
     result.show()
