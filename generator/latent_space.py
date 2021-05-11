@@ -74,8 +74,6 @@ class LatentSpace:
 
         direction_file = attribute + '.npy'
 
-        os.rmdir(GENERATED_IMAGES_PATH + attribute)
-
         if boost_intensity:
             intensity *= 3
         coeffs = [intensity]
