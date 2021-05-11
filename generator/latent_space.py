@@ -67,7 +67,7 @@ class LatentSpace:
 
     # @attribute from Adjustment enum
     # @intensity [-20, 20] with step = 0.2
-    def modify_face(self, attribute: str, intensity: int, boost_intensity: bool, resolution=256):
+    def modify_face(self, file_name: str, attribute: str, intensity: int, boost_intensity: bool, resolution=256):
         v = np.load(LATENT_REP_PATH + self.file_name[0])
         print(self.file_name)
         v = np.array([v])
@@ -78,9 +78,9 @@ class LatentSpace:
             intensity *= 3
         coeffs = [intensity]
         self.size = int(resolution), int(resolution)
-        return self.move_latent(v, direction_file, coeffs)
+        return self.move_latent(v, file_name, direction_file, coeffs)
 
-    def move_latent(self, latent_vector, direction_file, coeffs):
+    def move_latent(self, latent_vector, file_name, direction_file, coeffs):
         direction = np.load(LATENT_DIRECTIONS_PATH + direction_file)
         os.makedirs(GENERATED_IMAGES_PATH + direction_file.split('.')[0])
         for i, coeff in enumerate(coeffs):
@@ -89,7 +89,7 @@ class LatentSpace:
             images = self.generator.Gs.components.synthesis.run(new_latent_vector, **self.Gs_syn_kwargs)
             result = PIL.Image.fromarray(images[0], 'RGB')
             result.thumbnail(self.size, PIL.Image.ANTIALIAS)
-            result.save(GENERATED_IMAGES_PATH + direction_file.split('.')[0] + '/' + str(i).zfill(3) + '.png')
+            result.save(GENERATED_IMAGES_PATH + direction_file.split('.')[0] + '/' + file_name + str(i).zfill(3) + '.png')
             if len(coeffs) == 1:
                 return result
 
@@ -97,18 +97,25 @@ class LatentSpace:
 if __name__ == '__main__':
     generator = Generator(1, 'results/latent-space/raw-images', 'gdrive:networks/stylegan2-ffhq-config-f.pkl')
     latentSpace = LatentSpace(generator)
-    generator.generate_random_images()
+    # generator.generate_random_images()
 
     # Paso 1: cargar las imágenes en la carpeta RAW y hacer el crop (alinearla)
-    latentSpace.align_faces()
+    # latentSpace.align_faces()
+    print("Alignment ... done!")
 
     # Paso 2: entrenar la red y obtener la representación del espacio latente
     file_names = latentSpace.encode_faces()
+    print("Encoding ... done!")
 
     # Paso 3: modificar la imagen
     # @attribute from Adjustment enum
     # @intensity [-20, 20] with step = 0.2
-    result = latentSpace.modify_face(Adjustment.AGE.value, 5, False)
+    result = latentSpace.modify_face(Adjustment.AGE.value, "1", 0, False)
+    result = latentSpace.modify_face(Adjustment.AGE.value, "2", 5, False)
+    result = latentSpace.modify_face(Adjustment.AGE.value, "3", 10, False)
+    result = latentSpace.modify_face(Adjustment.GENDER.value, "1", 0, False)
+    result = latentSpace.modify_face(Adjustment.GENDER.value, "2", 5, False)
+    result = latentSpace.modify_face(Adjustment.GENDER.value, "3", 10, False)
 
     # Paso 4: resultados en GENERATED-IMAGES
     result.show()
