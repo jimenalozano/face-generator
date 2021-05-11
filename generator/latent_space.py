@@ -62,14 +62,12 @@ class LatentSpace:
         encode_images(aligned_images, generated_images,
                       latent_representations, self.generator.Gs,
                       image_size=1024, iterations=iterations, lr=learning_rate, batch_size=2)
-        self.file_name = [f for f in os.listdir(LATENT_REP_PATH) if os.path.isfile(os.path.join(LATENT_REP_PATH, f))]
-        return self.file_name
 
     # @attribute from Adjustment enum
     # @intensity [-20, 20] with step = 0.2
-    def modify_face(self, file_name: str, attribute: str, intensity: int, boost_intensity: bool, resolution=256):
-        v = np.load(LATENT_REP_PATH + self.file_name[0])
-        print(self.file_name)
+    def modify_face(self, attribute: str, file_name: str, intensity: int, boost_intensity: bool, resolution=256):
+        self.file_names = [f for f in os.listdir(LATENT_REP_PATH) if os.path.isfile(os.path.join(LATENT_REP_PATH, f))]
+        v = np.load(LATENT_REP_PATH + self.file_names[0])
         v = np.array([v])
 
         direction_file = attribute + '.npy'
@@ -82,7 +80,8 @@ class LatentSpace:
 
     def move_latent(self, latent_vector, file_name, direction_file, coeffs):
         direction = np.load(LATENT_DIRECTIONS_PATH + direction_file)
-        os.makedirs(GENERATED_IMAGES_PATH + direction_file.split('.')[0])
+        if not os.path.exists(GENERATED_IMAGES_PATH + direction_file.split('.')[0]):
+            os.makedirs(GENERATED_IMAGES_PATH + direction_file.split('.')[0])
         for i, coeff in enumerate(coeffs):
             new_latent_vector = latent_vector.copy()
             new_latent_vector[0][:8] = (latent_vector[0] + coeff * direction)[:8]
@@ -100,11 +99,11 @@ if __name__ == '__main__':
     # generator.generate_random_images()
 
     # Paso 1: cargar las imágenes en la carpeta RAW y hacer el crop (alinearla)
-    latentSpace.align_faces()
+    # latentSpace.align_faces()
     print("Alignment ... done!")
 
     # Paso 2: entrenar la red y obtener la representación del espacio latente
-    file_names = latentSpace.encode_faces()
+    # file_names = latentSpace.encode_faces()
     print("Encoding ... done!")
 
     # Paso 3: modificar la imagen
