@@ -34,11 +34,6 @@ class Generator:
         # In order for pickle.load() to work, you will need to have the dnnlib source directory in your PYTHONPATH
         # and a tf.Session set as default. The session can initialized by calling dnnlib.tflib.init_tf().
 
-        noise_vars = [var for name, var in \
-                      self.Gs.components.synthesis.vars.items()]
-
-        print(noise_vars)
-
     def generate_random_images(self):
         vector_size = self.Gs.input_shape[1:][0]
         seeds = Generator.expand_seed(range(8000, 8020), vector_size)
