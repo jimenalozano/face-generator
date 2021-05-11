@@ -12,10 +12,10 @@ from generator import Generator
 from align_images import align_images
 from encode_images import encode_images
 
-RAW_IMAGES_PATH = '../results/latent-space/raw-images/'
-ALIGNED_IMAGES_PATH = '../results/latent-space/aligned-images/'
-GENERATED_IMAGES_PATH = '../results/latent-space/generated_images/'
-LATENT_REP_PATH = '../results/latent-space/latent-representation/'
+RAW_IMAGES_PATH = 'results/latent-space/raw-images/'
+ALIGNED_IMAGES_PATH = 'results/latent-space/aligned-images/'
+GENERATED_IMAGES_PATH = 'results/latent-space/generated-images/'
+LATENT_REP_PATH = 'results/latent-space/latent-representation/'
 
 
 class Adjustment(Enum):
@@ -72,7 +72,7 @@ class LatentSpace:
 
         direction_file = attribute + '.npy'
 
-        os.rmdir(GENERATED_IMAGES_PATH + '/' + attribute)
+        os.rmdir(GENERATED_IMAGES_PATH + attribute)
 
         if boost_intensity:
             intensity *= 3
@@ -95,7 +95,7 @@ class LatentSpace:
 
 
 if __name__ == '__main__':
-    generator = Generator(1, '../results', 'gdrive:networks/stylegan2-ffhq-config-f.pkl')
+    generator = Generator(1, 'results/latent-space', 'gdrive:networks/stylegan2-ffhq-config-f.pkl')
     latentSpace = LatentSpace(generator)
 
     # Paso 1: cargar las imágenes en la carpeta RAW y hacer el crop (alinearla)

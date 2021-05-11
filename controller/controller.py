@@ -6,7 +6,7 @@ from generator import Generator
 
 
 def main():
-    generator = Generator(1, '../results', 'gdrive:networks/stylegan2-ffhq-config-f.pkl')
+    generator = Generator(1, 'results', 'gdrive:networks/stylegan2-ffhq-config-f.pkl')
 
     #   Generating random images
     print("Generating random images")
