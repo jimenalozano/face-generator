@@ -34,18 +34,23 @@ class Generator:
         # In order for pickle.load() to work, you will need to have the dnnlib source directory in your PYTHONPATH
         # and a tf.Session set as default. The session can initialized by calling dnnlib.tflib.init_tf().
 
-    def generate_random_images(self, qty: int, seed_from: int):
+    def generate_random_images(self, qty: int, seed_from: int, dlatents: bool):
+
         vector_size = self.Gs.input_shape[1:][0]
         seeds = Generator.expand_seed(range(seed_from, seed_from + qty), vector_size)
-        return self.generate_images(seeds, truncation_psi=0.5, path=self.results_dir_root)
+
+        if dlatents:
+            return self.get_dlatents(seeds, truncation_psi=0.5, path=self.results_dir_root)
+
+        self.generate_images(seeds, truncation_psi=0.5, path=self.results_dir_root)
 
     def generate_noise(self, seed, path):
         self.sc.run_dir_root = path
-        return self.noise(seed=seed, path=path)
+        self.noise(seed=seed, path=path)
 
     def generate_transition(self, seed, steps, path):
         self.sc.run_dir_root = path
-        return self.transition(seed=seed, steps=steps, path=path)
+        self.transition(seed=seed, steps=steps, path=path)
 
     @staticmethod
     def expand_seed(seeds, vector_size):
@@ -89,8 +94,6 @@ class Generator:
             image_path = f'{path}/image{seed_idx}.png'
             PIL.Image.fromarray(images[0], 'RGB').save(image_path)
 
-        return np.array(seeds)
-
     def transition(self, seed, steps, path):
         # range(8192,8300)
         vector_size = self.Gs.input_shape[1:][0]
@@ -106,7 +109,7 @@ class Generator:
             seeds2.append(current)
             current = current + step
 
-        return self.generate_images(seeds2, truncation_psi=0.5, path=path)
+        self.generate_images(seeds2, truncation_psi=0.5, path=path)
 
         # To view these generate images as a video file
         # ffmpeg -r 30 -i image%d.png -vcodec mpeg4 -y movie.mp4
@@ -114,4 +117,21 @@ class Generator:
     def noise(self, seed, path):
         vector_size = self.Gs.input_shape[1:][0]
         seeds = Generator.expand_seed([seed, seed, seed, seed, seed], vector_size)
-        return self.generate_images(seeds, truncation_psi=0.5, path=path)
+        self.generate_images(seeds, truncation_psi=0.5, path=path)
+
+    def get_dlatents(self, seeds, truncation_psi, path):
+        Gs_kwargs = dnnlib.EasyDict()
+        Gs_kwargs.output_transform = dict(func=tflib.convert_images_to_uint8, nchw_to_nhwc=True)
+        Gs_kwargs.randomize_noise = False
+        if truncation_psi is not None:
+            Gs_kwargs.truncation_psi = truncation_psi
+
+        src_latents = np.stack(np.random.RandomState(seed).randn(self.Gs.input_shape[1]) for seed in seeds)
+        src_dlatents = self.Gs.components.mapping.run(src_latents, None)  # [seed, layer, component]
+        src_images = self.Gs.components.synthesis.run(src_dlatents, randomize_noise=False, **Gs_kwargs)
+
+        for image, index in src_images:
+            image_path = f'{path}/image{index}.png'
+            PIL.Image.fromarray(image[0], 'RGB').save(image_path)
+
+        return src_dlatents
