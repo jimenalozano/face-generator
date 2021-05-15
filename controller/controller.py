@@ -10,7 +10,7 @@ def main():
 
     #   Generating random images
     print("Generating random images")
-    generator.generate_random_images()
+    generator.generate_random_images(qty=10, seed_from=8000)
 
     #   Examining the latent space
     print("Examining the latent space")
@@ -18,7 +18,7 @@ def main():
 
     #   Adding noise
     print("Adding noise")
-    generator.generate_noise(seed=500)
+    generator.generate_noise(seed=500, path='results/noise')
 
 
 if __name__ == "__main__":

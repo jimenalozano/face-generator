@@ -68,15 +68,14 @@ class LatentSpace:
     # @intensity [-20, 20] with step = 0.2
     def modify_face(self, attribute: str, intensity: int, boost_intensity: bool, resolution=256, index_dlatent=0):
         self.file_names = [f for f in os.listdir(LATENT_REP_PATH) if os.path.isfile(os.path.join(LATENT_REP_PATH, f))]
-        v = np.load(LATENT_REP_PATH + self.file_names[0])
+        # v = np.load(LATENT_REP_PATH + self.file_names[0])
+
+        v = self.generated_dlatents[index_dlatent]
         print("loaded npy: ")
         print(v)
         v = np.array([v])
         print("array: ")
         print(v)
-
-        # v = self.generated_dlatents[index_dlatent]
-        # v = np.array([v])
 
         direction_file = attribute + '.npy'
 
@@ -107,14 +106,14 @@ class LatentSpace:
 if __name__ == '__main__':
     generator = Generator(1, 'results/latent-space/raw-images', 'gdrive:networks/stylegan2-ffhq-config-f.pkl')
     latentSpace = LatentSpace(generator)
-    # latentSpace.generated_dlatents = generator.generate_random_images()
+    latentSpace.generated_dlatents = generator.generate_random_images(qty=1, seed_from=8006)
 
     # Paso 1: cargar las imágenes en la carpeta RAW y hacer el crop (alinearla)
-    latentSpace.align_faces()
+    # latentSpace.align_faces()
     print("Alignment ... done!")
 
     # Paso 2: entrenar la red y obtener la representación del espacio latente
-    latentSpace.encode_faces()
+    # latentSpace.encode_faces()
     print("Encoding ... done!")
 
     # Paso 3: modificar la imagen
@@ -139,4 +138,4 @@ if __name__ == '__main__':
     latentSpace.modify_face(Adjustment.GENDER.value, 8, False)
     latentSpace.modify_face(Adjustment.GENDER.value, 9, False)
 
-    generator.generate_transition(seed=8192, steps=10, path='results/transition')
+    # generator.generate_transition(seed=8192, steps=10, path='results/transition')
