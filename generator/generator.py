@@ -40,7 +40,7 @@ class Generator:
         seeds = Generator.expand_seed(range(seed_from, seed_from + qty), vector_size)
 
         if dlatents:
-            return self.get_dlatents(seeds, truncation_psi=0.5, path=self.results_dir_root)
+            return self.get_dlatents(range(seed_from, seed_from + qty), truncation_psi=0.5, path=self.results_dir_root)
 
         self.generate_images(seeds, truncation_psi=0.5, path=self.results_dir_root)
 
