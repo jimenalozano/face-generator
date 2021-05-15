@@ -72,10 +72,10 @@ class LatentSpace:
 
         v = self.generated_dlatents[index_dlatent]
         print("loaded npy: ")
-        print(v)
+        print(v.shape)
         v = np.array([v])
         print("array: ")
-        print(v)
+        print(v.shape)
 
         direction_file = attribute + '.npy'
 
@@ -88,13 +88,13 @@ class LatentSpace:
     def move_latent(self, latent_vector, direction_file, coeffs):
         direction = np.load(LATENT_DIRECTIONS_PATH + direction_file)
         print("direction: ")
-        print(direction)
+        print(direction.shape)
         os.makedirs(GENERATED_IMAGES_PATH + direction_file.split('.')[0], exist_ok=True)
         for i, coeff in enumerate(coeffs):
             for j in range(5):
                 new_latent_vector = latent_vector.copy()
                 new_latent_vector[0][:8] = (latent_vector[0] + (coeff + j * 0.2) * direction)[:8]
-                print(new_latent_vector)
+                print(new_latent_vector.shape)
                 images = self.generator.Gs.components.synthesis.run(new_latent_vector, **self.Gs_syn_kwargs)
                 result = PIL.Image.fromarray(images[0], 'RGB')
                 result.thumbnail(self.size, PIL.Image.ANTIALIAS)

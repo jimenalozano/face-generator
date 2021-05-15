@@ -89,7 +89,7 @@ class Generator:
             image_path = f'{path}/image{seed_idx}.png'
             PIL.Image.fromarray(images[0], 'RGB').save(image_path)
 
-        return seeds
+        return np.array(seeds)
 
     def transition(self, seed, steps, path):
         # range(8192,8300)
