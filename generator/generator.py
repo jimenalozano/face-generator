@@ -36,7 +36,7 @@ class Generator:
 
     def generate_random_images(self, qty: int, seed_from: int):
         vector_size = self.Gs.input_shape[1:][0]
-        seeds = Generator.expand_seed(range(seed_from, seed_from + qty - 1), vector_size)
+        seeds = Generator.expand_seed(range(seed_from, seed_from + qty), vector_size)
         return self.generate_images(seeds, truncation_psi=0.5, path=self.results_dir_root)
 
     def generate_noise(self, seed, path):
