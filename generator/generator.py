@@ -37,19 +37,15 @@ class Generator:
     def generate_random_images(self):
         vector_size = self.Gs.input_shape[1:][0]
         seeds = Generator.expand_seed(range(8000, 8020), vector_size)
-        Generator.generate_images(self.Gs, seeds, truncation_psi=0.5,
-                                  path=self.results_dir_root)
+        return self.generate_images(seeds, truncation_psi=0.5, path=self.results_dir_root)
 
-    def generate_noise(self, seed):
-        noise_path = self.results_dir_root + "/noise"
-        self.sc.run_dir_root = noise_path
-        Generator.noise(self.Gs, seed=seed, path=noise_path)
+    def generate_noise(self, seed, path):
+        self.sc.run_dir_root = path
+        return self.noise(seed=seed, path=path)
 
-    def generate_transition(self, seed, steps):
-        transition_path = self.results_dir_root + "/transition"
-        self.sc.run_dir_root = transition_path
-        Generator.transition(self.Gs, seed=seed, steps=steps,
-                             path=transition_path)
+    def generate_transition(self, seed, steps, path):
+        self.sc.run_dir_root = path
+        return self.transition(seed=seed, steps=steps, path=path)
 
     @staticmethod
     def expand_seed(seeds, vector_size):
@@ -60,17 +56,15 @@ class Generator:
             result.append(rnd.randn(1, vector_size))
         return result
 
-    @staticmethod
-    def generate_images(Gs, seeds, truncation_psi, path):
+    def generate_images(self, seeds, truncation_psi, path):
         noise_vars = [var for name, var in \
-                      Gs.components.synthesis.vars.items() \
+                      self.Gs.components.synthesis.vars.items() \
                       if name.startswith('noise')]
 
         # The following keyword arguments Gs_kwargs can be specified to modify the behavior when calling run() and
         # get_output_for()
         Gs_kwargs = dnnlib.EasyDict()
-        Gs_kwargs.output_transform = dict(func= \
-                                              tflib.convert_images_to_uint8, nchw_to_nhwc=True)
+        Gs_kwargs.output_transform = dict(func=tflib.convert_images_to_uint8, nchw_to_nhwc=True)
         Gs_kwargs.randomize_noise = False
         # truncation_psi and truncation_cutoff control the truncation trick that that is performed by default when
         # using Gs (ψ=0.7, cutoff=8). It can be disabled by setting truncation_psi=1 or is_validation=True,
@@ -83,10 +77,11 @@ class Generator:
         for seed_idx, seed in enumerate(seeds):
             print('Generating image for seed %d/%d ...' % (seed_idx, len(seeds)))
             rnd = np.random.RandomState()
-            tflib.set_vars({var: rnd.randn(*var.shape.as_list()) \
-                            for var in noise_vars})  # [height, width]
+            tflib.set_vars({var: rnd.randn(*var.shape.as_list()) for var in noise_vars})  # [height, width]
+
             # Use Gs.run() for immediate-mode operation where the inputs and outputs are numpy arrays:
-            images = Gs.run(seed, None, **Gs_kwargs)
+            images = self.Gs.run(seed, None, **Gs_kwargs)
+
             # The first argument is a batch of latent vectors of shape [num, 512]. The second argument is reserved
             # for class labels (not used by StyleGAN). The remaining keyword arguments are optional and can be used
             # to further modify the operation. The output is a batch of images, whose format is dictated
@@ -94,15 +89,13 @@ class Generator:
             image_path = f'{path}/image{seed_idx}.png'
             PIL.Image.fromarray(images[0], 'RGB').save(image_path)
 
-    @staticmethod
-    def transition(Gs, seed, steps, path):
+        return seeds
+
+    def transition(self, seed, steps, path):
         # range(8192,8300)
-        vector_size = Gs.input_shape[1:][0]
+        vector_size = self.Gs.input_shape[1:][0]
         seeds = Generator.expand_seed([seed + 1, seed + 9], vector_size)
         # generate_images(Gs, seeds,truncation_psi=0.5)
-        print(seeds[0].shape)
-
-        # 8192+1,8192+9
 
         diff = seeds[1] - seeds[0]
         step = diff / steps
@@ -113,13 +106,12 @@ class Generator:
             seeds2.append(current)
             current = current + step
 
-        Generator.generate_images(Gs, seeds2, truncation_psi=0.5, path=path)
+        return self.generate_images(seeds2, truncation_psi=0.5, path=path)
 
         # To view these generate images as a video file
         # ffmpeg -r 30 -i image%d.png -vcodec mpeg4 -y movie.mp4
 
-    @staticmethod
-    def noise(Gs, seed, path):
-        vector_size = Gs.input_shape[1:][0]
+    def noise(self, seed, path):
+        vector_size = self.Gs.input_shape[1:][0]
         seeds = Generator.expand_seed([seed, seed, seed, seed, seed], vector_size)
-        Generator.generate_images(Gs, seeds, truncation_psi=0.5, path=path)
+        return self.generate_images(seeds, truncation_psi=0.5, path=path)

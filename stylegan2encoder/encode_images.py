@@ -54,6 +54,7 @@ def encode_images(src_dir, generated_images_dir, dlatent_dir, Gs_network,
             np.save(os.path.join(dlatent_dir, f'{img_name}.npy'), dlatent)
 
         generator.reset_dlatents()
+        return generated_dlatents
 
 
 if __name__ == "__main__":

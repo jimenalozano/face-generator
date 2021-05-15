@@ -39,6 +39,7 @@ class LatentSpace:
     def __init__(self, generator: Generator):
         self.generator = generator
         self.file_names = []
+        self.generated_dlatents = []
         self.size = (256, 256)
 
         # Configure the generator
@@ -59,15 +60,18 @@ class LatentSpace:
     # Find latent representation of aligned images
     def encode_faces(self, aligned_images=ALIGNED_IMAGES_PATH, generated_images=GENERATED_IMAGES_PATH,
                      latent_representations=LATENT_REP_PATH, iterations=750, learning_rate=0.1) -> []:
-        encode_images(aligned_images, generated_images,
-                      latent_representations, self.generator.Gs,
-                      image_size=1024, iterations=iterations, lr=learning_rate, batch_size=2)
+        self.generated_dlatents = encode_images(aligned_images, generated_images, latent_representations,
+                                                self.generator.Gs, image_size=1024, iterations=iterations,
+                                                lr=learning_rate, batch_size=2)
 
     # @attribute from Adjustment enum
     # @intensity [-20, 20] with step = 0.2
-    def modify_face(self, attribute: str, intensity: int, boost_intensity: bool, resolution=256):
-        self.file_names = [f for f in os.listdir(LATENT_REP_PATH) if os.path.isfile(os.path.join(LATENT_REP_PATH, f))]
-        v = np.load(LATENT_REP_PATH + self.file_names[0])
+    def modify_face(self, attribute: str, intensity: int, boost_intensity: bool, resolution=256, index_dlatent=0):
+        # self.file_names = [f for f in os.listdir(LATENT_REP_PATH) if os.path.isfile(os.path.join(LATENT_REP_PATH, f))]
+        # v = np.load(LATENT_REP_PATH + self.file_names[0])
+        # v = np.array([v])
+
+        v = self.generated_dlatents[index_dlatent]
         v = np.array([v])
 
         direction_file = attribute + '.npy'
@@ -88,7 +92,7 @@ class LatentSpace:
                 images = self.generator.Gs.components.synthesis.run(new_latent_vector, **self.Gs_syn_kwargs)
                 result = PIL.Image.fromarray(images[0], 'RGB')
                 result.thumbnail(self.size, PIL.Image.ANTIALIAS)
-                result.save(GENERATED_IMAGES_PATH + direction_file.split('.')[0] + '/' + str(coeff + j * 0.2) + '.png')
+                result.save(GENERATED_IMAGES_PATH + direction_file.split('.')[0] + '/' + str(coeff) + '.' + str(j) + '.png')
                 if len(coeffs) == 1:
                     return result
 
@@ -96,14 +100,14 @@ class LatentSpace:
 if __name__ == '__main__':
     generator = Generator(1, 'results/latent-space/raw-images', 'gdrive:networks/stylegan2-ffhq-config-f.pkl')
     latentSpace = LatentSpace(generator)
-    # generator.generate_random_images()
+    latentSpace.generated_dlatents = generator.generate_random_images()
 
     # Paso 1: cargar las imágenes en la carpeta RAW y hacer el crop (alinearla)
-    latentSpace.align_faces()
+    # latentSpace.align_faces()
     print("Alignment ... done!")
 
     # Paso 2: entrenar la red y obtener la representación del espacio latente
-    latentSpace.encode_faces()
+    # latentSpace.encode_faces()
     print("Encoding ... done!")
 
     # Paso 3: modificar la imagen
@@ -127,3 +131,5 @@ if __name__ == '__main__':
     latentSpace.modify_face(Adjustment.GENDER.value, 7, False)
     latentSpace.modify_face(Adjustment.GENDER.value, 8, False)
     latentSpace.modify_face(Adjustment.GENDER.value, 9, False)
+
+    generator.generate_transition(seed=8192, steps=10, path='results/transition')
