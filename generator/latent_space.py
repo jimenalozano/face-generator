@@ -68,9 +68,8 @@ class LatentSpace:
     # @intensity [-20, 20] with step = 0.2
     def modify_face(self, attribute: str, intensity: int, boost_intensity: bool, resolution=256, index_dlatent=0):
         self.file_names = [f for f in os.listdir(LATENT_REP_PATH) if os.path.isfile(os.path.join(LATENT_REP_PATH, f))]
-        # v = np.load(LATENT_REP_PATH + self.file_names[0])
-
-        v = self.generated_dlatents[index_dlatent]
+        v = np.load(LATENT_REP_PATH + self.file_names[0])
+        # v = self.generated_dlatents[index_dlatent]
         print("loaded npy: ")
         print(v.shape)
         v = np.array([v])
@@ -106,7 +105,7 @@ class LatentSpace:
 if __name__ == '__main__':
     generator = Generator(1, 'results/latent-space/raw-images', 'gdrive:networks/stylegan2-ffhq-config-f.pkl')
     latentSpace = LatentSpace(generator)
-    latentSpace.generated_dlatents = generator.generate_random_images(qty=1, seed_from=8006)
+    # latentSpace.generated_dlatents = generator.generate_random_images(qty=1, seed_from=8006)
 
     # Paso 1: cargar las imágenes en la carpeta RAW y hacer el crop (alinearla)
     # latentSpace.align_faces()
