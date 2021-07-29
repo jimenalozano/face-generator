@@ -6,7 +6,7 @@ sys.path.insert(0, "../generator")
 sys.path.insert(0, "../persistance")
 
 from generator import Generator
-from persistance.generator_seeds import GeneratorSeedsDb
+from generator_seeds import GeneratorSeedsDb
 
 
 generator = Generator(num_gpus=1,
@@ -15,7 +15,6 @@ generator = Generator(num_gpus=1,
 
 db = GeneratorSeedsDb()
 db.open_sql_connection()
-db.create_sql_table_seeds()
 
 
 def generate_random_images(qty: int):
@@ -33,8 +32,11 @@ def generate_transition(id_img1: int, id_img2: int = None):
 
     print("Generating transition from image " + str(id_img1) + " to image " + str(id_img2))
 
-    seed_1 = db.fetch_id(id_img1)
-    seed_2 = db.fetch_id(id_img2)
+    seed_1 = db.fetch_id(id_img1)[0]
+    seed_2 = db.fetch_id(id_img2)[0]
+
+    print(seed_1)
+    print(seed_2)
 
     generator.generate_transition(seed_from=seed_1, seed_to=seed_2, steps=100, path='results/transition')
 
