@@ -1,66 +1,66 @@
 import sqlite3
 
 
-def open_sql_connection():
-    db_filename = 'generator_seeds.db'
-    return sqlite3.connect(db_filename)
+class GeneratorSeedsDb:
+    def __init__(self):
+        self.db_filename = 'generator_seeds.db'
+        self.connection = None
 
+    def open_sql_connection(self):
+        self.connection = sqlite3.connect(self.db_filename)
 
-def sql_table_seeds(conn):
-    cursorObj = conn.cursor()
+    def create_sql_table_seeds(self):
+        cursorObj = self.connection.cursor()
 
-    cursorObj.execute(
-        "CREATE TABLE generator_seeds("
-        "ID INTEGER PRIMARY KEY AUTOINCREMENT, "
-        "SEED INTEGER,"
-        "UNIQUE (SEED)"
-        ")"
-    )
+        cursorObj.execute(
+            "CREATE TABLE generator_seeds("
+            "ID INTEGER PRIMARY KEY AUTOINCREMENT, "
+            "SEED INTEGER,"
+            "UNIQUE (SEED)"
+            ")"
+        )
 
-    conn.commit()
+        self.connection.commit()
 
+    def insert_seeds(self, seeds: [int]):
+        cursorObj = self.connection.cursor()
 
-def insert_into_seeds(conn, seed: int):
-    cursorObj = conn.cursor()
+        cursorObj.execute(
+            "INSERT INTO generator_seeds(seed) VALUES(?)",
+            seeds)
 
-    cursorObj.execute(
-        "INSERT INTO generator_seeds(seed) VALUES(?)",
-        (seed,))
+        self.connection.commit()
 
-    conn.commit()
+    def fetch_id(self, id: int):
+        cursorObj = self.connection.cursor()
 
+        cursorObj.execute('SELECT SEED FROM generator_seeds WHERE ID == ?', (id,))
 
-def fetch_id(conn, id: int):
-    cursorObj = conn.cursor()
+        return cursorObj.fetchall()
 
-    cursorObj.execute('SELECT SEED FROM generator_seeds WHERE ID == ?', (id, ))
+    def fetch_all(self):
+        cursorObj = self.connection.cursor()
 
-    return cursorObj.fetchall()
+        cursorObj.execute('SELECT * FROM generator_seeds')
 
+        return cursorObj.fetchall()
 
-def sql_fetch(con):
-    cursorObj = con.cursor()
-
-    cursorObj.execute('SELECT * FROM generator_seeds')
-
-    return cursorObj.fetchall()
-
-
-def close_sql_connection(conn):
-    conn.close()
+    def close_sql_connection(self):
+        self.connection.close()
 
 
 if __name__ == '__main__':
-    connection = open_sql_connection()
+
+    db = GeneratorSeedsDb()
+    db.open_sql_connection()
 
     # ONLY FIRST TIME, THEN COMMENT
-    sql_table_seeds(connection)
+    # db.create_sql_table_seeds()
 
-    insert_into_seeds(connection, 8106)
+    db.insert_seeds([8107])
 
-    rows = sql_fetch(connection)
+    rows = db.fetch_all()
     for row in rows:
         print(row)
 
-    print(fetch_id(connection, 1))
-
+    print(db.fetch_id(1))

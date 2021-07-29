@@ -43,6 +43,7 @@ class Generator:
             return self.get_dlatents(range(seed_from, seed_from + qty), truncation_psi=0.5, path=self.results_dir_root)
 
         self.generate_images(seeds, truncation_psi=0.5, path=self.results_dir_root)
+        return range(seed_from, seed_from + qty)
 
     def generate_noise(self, seed, path):
         self.sc.run_dir_root = path
