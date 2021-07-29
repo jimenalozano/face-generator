@@ -2,11 +2,12 @@ import sys
 
 import numpy as np
 
-from persistance.generator_seeds import GeneratorSeedsDb
-
 sys.path.insert(0, "../generator")
+sys.path.insert(0, "../persistance")
 
 from generator import Generator
+from persistance.generator_seeds import GeneratorSeedsDb
+
 
 generator = Generator(num_gpus=1,
                       results_dir_root='results',
