@@ -66,7 +66,7 @@ class LatentSpace:
 
     # @attribute from Adjustment enum
     # @intensity [-20, 20] with step = 0.2
-    def modify_face(self, attribute: str, intensity: int, boost_intensity: bool, resolution=256, index_dlatent=0):
+    def modify_face(self, attribute: str, intensity: float, boost_intensity: bool, resolution=256, index_dlatent=0):
         self.file_names = [f for f in os.listdir(LATENT_REP_PATH) if os.path.isfile(os.path.join(LATENT_REP_PATH, f))]
         # v = np.load(LATENT_REP_PATH + self.file_names[index_dlatent])
         v = self.generated_dlatents[index_dlatent]
@@ -86,18 +86,16 @@ class LatentSpace:
 
     def move_latent(self, latent_vector, direction_file, coeffs):
         direction = np.load(LATENT_DIRECTIONS_PATH + direction_file)
-        print("direction: ")
-        print(direction.shape)
         os.makedirs(GENERATED_IMAGES_PATH + direction_file.split('.')[0], exist_ok=True)
         for i, coeff in enumerate(coeffs):
             for j in range(5):
                 new_latent_vector = latent_vector.copy()
                 new_latent_vector[0][:8] = (latent_vector[0] + (coeff + j * 0.2) * direction)[:8]
-                print(new_latent_vector.shape)
                 images = self.generator.Gs.components.synthesis.run(new_latent_vector, **self.Gs_syn_kwargs)
                 result = PIL.Image.fromarray(images[0], 'RGB')
                 result.thumbnail(self.size, PIL.Image.ANTIALIAS)
-                result.save(GENERATED_IMAGES_PATH + direction_file.split('.')[0] + '/' + str(coeff) + '.' + str(j) + '.png')
+                result.save(GENERATED_IMAGES_PATH + direction_file.split('.')[0] + '/' + str(coeff) + '.' + str(j) +
+                            '.png')
                 if len(coeffs) == 1:
                     return result
 
@@ -119,22 +117,14 @@ if __name__ == '__main__':
     # @attribute from Adjustment enum
     # @intensity [-20, 20] with step = 0.2
     latentSpace.modify_face(Adjustment.AGE.value, 1, False)
-    latentSpace.modify_face(Adjustment.AGE.value, 2, False)
-    latentSpace.modify_face(Adjustment.AGE.value, 3, False)
-    latentSpace.modify_face(Adjustment.AGE.value, 4, False)
-    latentSpace.modify_face(Adjustment.AGE.value, 5, False)
-    latentSpace.modify_face(Adjustment.AGE.value, 6, False)
-    latentSpace.modify_face(Adjustment.AGE.value, 7, False)
-    latentSpace.modify_face(Adjustment.AGE.value, 8, False)
-    latentSpace.modify_face(Adjustment.AGE.value, 9, False)
+    latentSpace.modify_face(Adjustment.AGE.value, 1.2, False)
+    latentSpace.modify_face(Adjustment.AGE.value, 1.4, False)
+    latentSpace.modify_face(Adjustment.AGE.value, 1.6, False)
+    latentSpace.modify_face(Adjustment.AGE.value, 1.8, False)
     latentSpace.modify_face(Adjustment.GENDER.value, 1, False)
-    latentSpace.modify_face(Adjustment.GENDER.value, 2, False)
-    latentSpace.modify_face(Adjustment.GENDER.value, 3, False)
-    latentSpace.modify_face(Adjustment.GENDER.value, 4, False)
-    latentSpace.modify_face(Adjustment.GENDER.value, 5, False)
-    latentSpace.modify_face(Adjustment.GENDER.value, 6, False)
-    latentSpace.modify_face(Adjustment.GENDER.value, 7, False)
-    latentSpace.modify_face(Adjustment.GENDER.value, 8, False)
-    latentSpace.modify_face(Adjustment.GENDER.value, 9, False)
+    latentSpace.modify_face(Adjustment.GENDER.value, 1.2, False)
+    latentSpace.modify_face(Adjustment.GENDER.value, 1.4, False)
+    latentSpace.modify_face(Adjustment.GENDER.value, 1.6, False)
+    latentSpace.modify_face(Adjustment.GENDER.value, 1.8, False)
 
-    # generator.generate_transition(seed=8192, steps=10, path='results/transition')
+    generator.generate_transition(seed_from=8006, seed_to=8007, steps=10, path='results/transition')

@@ -6,7 +6,9 @@ from generator import Generator
 
 
 def main():
-    generator = Generator(1, 'results', 'gdrive:networks/stylegan2-ffhq-config-f.pkl')
+    generator = Generator(num_gpus=1,
+                          results_dir_root='results',
+                          network_pkl='gdrive:networks/stylegan2-ffhq-config-f.pkl')
 
     #   Generating random images
     print("Generating random images")
@@ -14,7 +16,7 @@ def main():
 
     #   Examining the latent space
     print("Examining the latent space")
-    generator.generate_transition(seed=8192, steps=300, path='results/transition')
+    generator.generate_transition(seed_from=8192, seed_to=8201, steps=300, path='results/transition')
 
     #   Adding noise
     print("Adding noise")

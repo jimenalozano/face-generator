@@ -48,9 +48,9 @@ class Generator:
         self.sc.run_dir_root = path
         self.noise(seed=seed, path=path)
 
-    def generate_transition(self, seed, steps, path):
+    def generate_transition(self, seed_from, seed_to, steps, path):
         self.sc.run_dir_root = path
-        self.transition(seed=seed, steps=steps, path=path)
+        self.transition(seed_from=seed_from, seed_to=seed_to, steps=steps, path=path)
 
     @staticmethod
     def expand_seed(seeds, vector_size):
@@ -94,10 +94,10 @@ class Generator:
             image_path = f'{path}/image{seed_idx}.png'
             PIL.Image.fromarray(images[0], 'RGB').save(image_path)
 
-    def transition(self, seed, steps, path):
+    def transition(self, seed_from, seed_to, steps, path):
         # range(8192,8300)
         vector_size = self.Gs.input_shape[1:][0]
-        seeds = Generator.expand_seed([seed + 1, seed + 9], vector_size)
+        seeds = Generator.expand_seed([seed_from, seed_to], vector_size)
         # generate_images(Gs, seeds,truncation_psi=0.5)
 
         diff = seeds[1] - seeds[0]
@@ -128,10 +128,10 @@ class Generator:
 
         src_latents = np.stack(np.random.RandomState(seed).randn(self.Gs.input_shape[1]) for seed in seeds)
         src_dlatents = self.Gs.components.mapping.run(src_latents, None)  # [seed, layer, component]
-        src_images = self.Gs.components.synthesis.run(src_dlatents, randomize_noise=False, **Gs_kwargs)
+        src_images = self.Gs.components.synthesis.run(src_dlatents, **Gs_kwargs)
 
-        for image, index in src_images:
+        for index, image in enumerate(src_images):
             image_path = f'{path}/image{index}.png'
-            PIL.Image.fromarray(image[0], 'RGB').save(image_path)
+            PIL.Image.fromarray(image, 'RGB').save(image_path)
 
         return src_dlatents
