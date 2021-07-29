@@ -16,7 +16,7 @@ def main():
 
     #   Examining the latent space
     print("Examining the latent space")
-    generator.generate_transition(seed_from=8192, seed_to=8201, steps=300, path='results/transition')
+    generator.generate_transition(seed_from=8192, seed_to=8201, steps=100, path='results/transition')
 
     #   Adding noise
     print("Adding noise")
