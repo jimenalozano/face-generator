@@ -10,12 +10,12 @@ from generator_seeds import GeneratorSeedsDb
 
 
 generator = Generator(num_gpus=1,
-                      results_dir_root='results',
+                      results_dir_root='/home/jilozano/face-generator/generator/results',
                       network_pkl='gdrive:networks/stylegan2-ffhq-config-f.pkl')
 
-db = GeneratorSeedsDb()
+db = GeneratorSeedsDb('/home/jilozano/face-generator/persistance')
 db.open_sql_connection()
-
+db.create_sql_table_seeds()
 
 def generate_random_images(qty: int):
     print("Generating random images.....")
@@ -38,7 +38,7 @@ def generate_transition(id_img1: int, id_img2: int = None):
     print(seed_1)
     print(seed_2)
 
-    generator.generate_transition(seed_from=seed_1, seed_to=seed_2, steps=100, path='results/transition')
+    generator.generate_transition(seed_from=seed_1, seed_to=seed_2, steps=100, path='/home/jilozano/face-generator/generator/results/transition')
 
 
 if __name__ == "__main__":
