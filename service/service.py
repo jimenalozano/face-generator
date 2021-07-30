@@ -3,9 +3,8 @@ from pathlib import Path
 
 import numpy as np
 
-home_path = str(Path.home())
-sys.path.insert(0, home_path + "/generator")
-sys.path.insert(0, home_path + "/persistance")
+sys.path.insert(0, "../generator")
+sys.path.insert(0, "../persistance")
 
 from generator import Generator
 from generator_seeds import GeneratorSeedsDb
