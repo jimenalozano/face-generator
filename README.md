@@ -24,11 +24,13 @@ Check hardware requirements are OK
 ```bash
 python cli/cli.py
 ```
-Finally, you are ready to go!! Run the face generator
+Finally, you are ready to go! Run the face generator services from:
 ```bash
 cd service
 python service.py
 ```
+
+Notice that, if you dont have the database, you should uncomment line 24 of service.py to create the table needed to store the seeds of every face generated. In that way you can later use the transition service, by choosing the images from the database.
 
 You can see the results at face-generator/results/
 

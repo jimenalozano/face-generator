@@ -20,6 +20,8 @@ class GeneratorService:
 
         self.db = GeneratorSeedsDb(self.home_path + '/face-generator/persistance')
         self.db.open_sql_connection()
+        # Uncomment to create the table: (only when the database is new)
+        # self.db.create_sql_table_seeds()
 
     def generate_random_images(self, qty: int):
         print("Generating random images.....")
