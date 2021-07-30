@@ -31,8 +31,8 @@ def generate_transition(id_img1: int, id_img2: int = None):
 
     print("Generating transition from image " + str(id_img1) + " to image " + str(id_img2))
 
-    seed_1 = db.fetch_id(id_img1)[0]
-    seed_2 = db.fetch_id(id_img2)[0]
+    seed_1 = db.fetch_id(id_img1)[0][0]
+    seed_2 = db.fetch_id(id_img2)[0][0]
 
     print(seed_1)
     print(seed_2)
