@@ -2,8 +2,8 @@ import sqlite3
 
 
 class GeneratorSeedsDb:
-    def __init__(self):
-        self.db_filename = 'generator_seeds.db'
+    def __init__(self, path: str):
+        self.db_filename = path + '/generator_seeds.db'
         self.connection = None
 
     def open_sql_connection(self):
@@ -25,9 +25,10 @@ class GeneratorSeedsDb:
     def insert_seeds(self, seeds: [int]):
         cursorObj = self.connection.cursor()
 
-        cursorObj.execute(
-            "INSERT INTO generator_seeds(seed) VALUES(?)",
-            seeds)
+        for seed in seeds:
+            cursorObj.execute(
+                "INSERT INTO generator_seeds(seed) VALUES(?)",
+                (seed,))
 
         self.connection.commit()
 
