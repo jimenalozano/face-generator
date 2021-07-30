@@ -30,6 +30,6 @@ venv/
 */.stylegan2-cache/
 
 # Packages
-controller/__pycache__
+service/__pycache__
 generator/__pycache__
 

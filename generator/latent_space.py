@@ -12,10 +12,10 @@ from generator import Generator
 from align_images import align_images
 from encode_images import encode_images
 
-RAW_IMAGES_PATH = 'results/latent-space/raw-images/'
-ALIGNED_IMAGES_PATH = 'results/latent-space/aligned-images/'
-GENERATED_IMAGES_PATH = 'results/latent-space/generated-images/'
-LATENT_REP_PATH = 'results/latent-space/latent-representation/'
+RAW_IMAGES_PATH = 'latent-space/raw-images/'
+ALIGNED_IMAGES_PATH = 'latent-space/aligned-images/'
+GENERATED_IMAGES_PATH = 'latent-space/generated-images/'
+LATENT_REP_PATH = 'latent-space/latent-representation/'
 LATENT_DIRECTIONS_PATH = 'latent-directions/'
 
 
@@ -101,7 +101,7 @@ class LatentSpace:
 
 
 if __name__ == '__main__':
-    generator = Generator(1, 'results/latent-space/raw-images', 'gdrive:networks/stylegan2-ffhq-config-f.pkl')
+    generator = Generator(1, 'latent-space/raw-images', 'gdrive:networks/stylegan2-ffhq-config-f.pkl')
     latentSpace = LatentSpace(generator)
     generator.generate_random_images(qty=1, seed_from=8006, dlatents=False)
 
