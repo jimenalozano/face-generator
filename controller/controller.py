@@ -15,7 +15,6 @@ generator = Generator(num_gpus=1,
 
 db = GeneratorSeedsDb('/home/jilozano/face-generator/persistance')
 db.open_sql_connection()
-db.create_sql_table_seeds()
 
 def generate_random_images(qty: int):
     print("Generating random images.....")
@@ -42,5 +41,4 @@ def generate_transition(id_img1: int, id_img2: int = None):
 
 
 if __name__ == "__main__":
-    generate_random_images(10)
     generate_transition(1, 2)
