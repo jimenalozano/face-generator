@@ -5,3 +5,4 @@ requests
 keras==2.3.1
 dlib
 tqdm
+Flask
