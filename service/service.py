@@ -18,33 +18,32 @@ class GeneratorService:
             results_dir_root=self.home_path + '/face-generator/results',
             network_pkl='gdrive:networks/stylegan2-ffhq-config-f.pkl')
 
-        self.db = GeneratorSeedsDb(self.home_path + '/face-generator/persistance')
-        self.db.open_sql_connection()
-        # Uncomment to create the table: (only when the database is new)
-        # self.db.create_sql_table_seeds()
+        self.db = GeneratorSeedsDb(self.home_path + '/face-generator/persistance').open()
 
     def get_ids(self):
-        return self.db.fetch_all()
+        return GeneratorSeedsDb.fetch_all(connection=self.db)
 
     def generate_random_images(self, qty: int):
         print("Generating random images.....")
         seed_from = np.random.randint(30000)
         seeds = self.generator.generate_random_images(qty=qty, seed_from=seed_from, dlatents=False)
-        self.db.insert_seeds(seeds)
-        return self.db.fetch_all()
+        GeneratorSeedsDb.insert_seeds(connection=self.db, seeds=seeds)
+        return GeneratorSeedsDb.fetch_all(connection=self.db)
 
     def generate_transition(self, id_img1: int, id_img2: int = None, percentage: float = 1.0):
-        if id_img2 is None:
-            all_images = self.db.fetch_all()
+
+        all_images = GeneratorSeedsDb.fetch_all(connection=self.db)
+
+        while id_img2 is None and id_img2 != id_img1:
             id_img2 = all_images[np.random.randint(len(all_images))][0]
 
-        print("Generating transition from image " + str(id_img1) + " to image " + str(id_img2))
+        print("Generating transition from image #" + str(id_img1) + " to image #" + str(id_img2))
 
-        seed_1 = self.db.fetch_id(id_img1)[0][0]
-        seed_2 = self.db.fetch_id(id_img2)[0][0]
+        seed_1 = GeneratorSeedsDb.fetch_id(connection=self.db, id=id_img1)[0][0]
+        seed_2 = GeneratorSeedsDb.fetch_id(connection=self.db, id=id_img2)[0][0]
 
-        print(seed_1)
-        print(seed_2)
+        print("with seed 1 = " + seed_1)
+        print("and seed 2 = " + seed_2)
 
         self.generator.generate_transition(seed_from=seed_1, seed_to=seed_2, steps=int(100*percentage),
                                            path=self.home_path + '/face-generator/results/transition')
