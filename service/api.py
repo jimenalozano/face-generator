@@ -20,9 +20,14 @@ def getFaces():
 @app.route('/faces', methods=['POST'])
 def generateFaces():
     amount = request.args.get('amount')
+    id = request.args.get('id')
     id1 = request.args.get('id1')
     id2 = request.args.get('id2')
     speed = request.args.get('speed')
+
+    if amount is None and id is not None:
+        ids = service.generate_face(int(id))
+        return jsonify({'ids': ids})
 
     if id1 is None:
         ids = service.generate_random_images(int(amount))

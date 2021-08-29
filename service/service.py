@@ -18,6 +18,17 @@ def get_ids():
     return database.fetch_all()
 
 
+def generate_face(id: int):
+    generator = Generator(
+        num_gpus=1,
+        results_dir_root=home_path + '/face-generator/results',
+        network_pkl='gdrive:networks/stylegan2-ffhq-config-f.pkl')
+    print("Generating random images.....")
+    seed = database.fetch_id(id=id)[0][0]
+    generator.generate_random_images(qty=1, seed_from=seed, dlatents=False)
+    return database.fetch_all()
+
+
 def generate_random_images(qty: int):
     generator = Generator(
         num_gpus=1,
