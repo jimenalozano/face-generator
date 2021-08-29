@@ -25,7 +25,7 @@ def generate_face(id: int):
         network_pkl='gdrive:networks/stylegan2-ffhq-config-f.pkl')
     print("Generating random images.....")
     seed = database.fetch_id(id=id)[0][0]
-    generator.generate_random_images(qty=1, seed_from=seed, dlatents=False)
+    generator.generate_random_images(qty=1, seed_from=seed, dlatents=False, id_from=id)
     return database.fetch_all()
 
 
@@ -36,7 +36,8 @@ def generate_random_images(qty: int):
         network_pkl='gdrive:networks/stylegan2-ffhq-config-f.pkl')
     print("Generating random images.....")
     seed_from = np.random.randint(30000)
-    seeds = generator.generate_random_images(qty=qty, seed_from=seed_from, dlatents=False)
+    last_id = len(database.fetch_all())
+    seeds = generator.generate_random_images(qty=qty, seed_from=seed_from, dlatents=False, id_from=last_id+1)
     database.insert_seeds(seeds=seeds)
     return database.fetch_all()
 
