@@ -64,11 +64,9 @@ class Generator:
 
     def generate_images(self, seeds, truncation_psi, path):
 
-        dnnlib.tflib.init_tf()
-
-        noise_vars = [var for name, var in \
-                      self.Gs.components.synthesis.vars.items() \
-                      if name.startswith('noise')]
+        # noise_vars = [var for name, var in \
+        #               self.Gs.components.synthesis.vars.items() \
+        #               if name.startswith('noise')]
 
         # The following keyword arguments Gs_kwargs can be specified to modify the behavior when calling run() and
         # get_output_for()
@@ -85,8 +83,8 @@ class Generator:
 
         for seed_idx, seed in enumerate(seeds):
             print('Generating image for seed %d/%d ...' % (seed_idx, len(seeds)))
-            rnd = np.random.RandomState()
-            tflib.set_vars({var: rnd.randn(*var.shape.as_list()) for var in noise_vars})  # [height, width]
+            # rnd = np.random.RandomState()
+            # tflib.set_vars({var: rnd.randn(*var.shape.as_list()) for var in noise_vars})  # [height, width]
 
             # Use Gs.run() for immediate-mode operation where the inputs and outputs are numpy arrays:
             images = self.Gs.run(seed, None, **Gs_kwargs)
