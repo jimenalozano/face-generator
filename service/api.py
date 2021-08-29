@@ -1,9 +1,12 @@
 from flask import Flask, request, jsonify
 
 import service
+from service import GeneratorService
 
 app = Flask(__name__)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
+
+service = GeneratorService()
 
 
 @app.route('/hello')
@@ -25,26 +28,25 @@ def generateFaces():
     id2 = request.args.get('id2')
     speed = request.args.get('speed')
 
-    if amount is None and id is not None:
+    if id is not None and amount is None and id1 is None and speed is None:
         ids = service.generate_face(int(id))
         return jsonify({'ids': ids})
 
-    if id1 is None:
+    if amount is not None and id is None and id1 is None and speed is None:
         ids = service.generate_random_images(int(amount))
         return jsonify({'ids': ids})
 
-    if id1 is not None and amount is not None and speed is not None:
+    if amount is not None and id1 is not None and speed is not None:
         id1 = int(id1)
         if id2 is not None:
             id2 = int(id2)
         speed = float(speed)
         amount = int(amount)
         service.generate_transition(id1, id2, amount, speed)
-        return 200
+        return jsonify({'msg': "OK", 'code': 200})
 
-    return "Bad request", 404
+    return jsonify({'msg': "Bad request", 'code': 404})
 
 
 if __name__ == '__main__':
     app.run('0.0.0.0', 5000)
-
