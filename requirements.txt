@@ -1,7 +1,7 @@
 tensorflow-gpu==1.14
 numpy==1.14.5
-Pillow
-requests
+Pillow==6.2.1
+requests==2.22.0
 keras==2.3.1
 dlib
 tqdm
