@@ -11,7 +11,7 @@ class GeneratorSeedsDb:
         connection = sqlite3.connect(self.db_filename)
 
         connection.cursor().execute(
-            "CREATE TABLE generator_seeds("
+            "CREATE TABLE IF NOT EXISTS generator_seeds("
             "ID INTEGER PRIMARY KEY AUTOINCREMENT, "
             "SEED INTEGER,"
             "UNIQUE (SEED)"

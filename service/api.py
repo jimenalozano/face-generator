@@ -1,8 +1,9 @@
 from flask import Flask, request, jsonify
 
-from service import service
+import service
 
 app = Flask(__name__)
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
 
 
 @app.route('/hello')
@@ -31,7 +32,7 @@ def generateFaces():
         if id2 is not None:
             id2 = int(id2)
         percentage = float(percentage)
-        generatorService.generate_transition(id1, id2, percentage)
+        service.generate_transition(id1, id2, percentage)
         return 200
 
     return "Bad request", 404

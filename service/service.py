@@ -42,8 +42,8 @@ def generate_transition(id_img1: int, id_img2: int = None, percentage: float = 1
     seed_1 = database.fetch_id(id=id_img1)[0][0]
     seed_2 = database.fetch_id(id=id_img2)[0][0]
 
-    print("with seed 1 = " + seed_1)
-    print("and seed 2 = " + seed_2)
+    print("with seed 1 = " + str(seed_1))
+    print("and seed 2 = " + str(seed_2))
 
     generator = Generator(
         num_gpus=1,
