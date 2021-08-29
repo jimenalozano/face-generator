@@ -1,10 +1,8 @@
 from flask import Flask, request, jsonify
 
-from service import GeneratorService
+from service import service
 
 app = Flask(__name__)
-
-generatorService = GeneratorService()
 
 
 @app.route('/hello')
@@ -14,7 +12,7 @@ def home():
 
 @app.route('/faces')
 def getFaces():
-    ids = generatorService.get_ids()
+    ids = service.get_ids()
     return jsonify({'ids': ids})
 
 
@@ -22,7 +20,7 @@ def getFaces():
 def generateFaces():
     amount = request.args.get('amount')
     if amount is not None:
-        ids = generatorService.generate_random_images(int(amount))
+        ids = service.generate_random_images(int(amount))
         return jsonify({'ids': ids})
 
     id1 = request.args.get('id1')
