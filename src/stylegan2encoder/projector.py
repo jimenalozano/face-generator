@@ -6,9 +6,10 @@
 
 import numpy as np
 import tensorflow as tf
-from stylegan2encoder import dnnlib, dnnlib as tflib
+from stylegan2encoder import dnnlib
+from src.stylegan2encoder import dnnlib as tflib
 
-from stylegan2encoder.training import misc
+from src.stylegan2encoder.training import misc
 
 
 #----------------------------------------------------------------------------

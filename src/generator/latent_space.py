@@ -8,7 +8,7 @@ import dnnlib
 import dnnlib.tflib as tflib
 from enum import Enum
 import numpy as np
-from generator import Generator
+from src.generator import Generator
 from align_images import align_images
 from encode_images import encode_images
 

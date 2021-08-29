@@ -3,7 +3,7 @@ import sys
 sys.path.insert(0, "../generator")
 sys.path.insert(0, "../persistance")
 
-from generator import Generator
+from src.generator import Generator
 
 from pathlib import Path
 import numpy as np
@@ -11,7 +11,7 @@ from generator_seeds import GeneratorSeedsDb
 
 home_path = str(Path.home())
 
-database = GeneratorSeedsDb(home_path + '/face-generator/persistance')
+database = GeneratorSeedsDb(home_path + '/face-generator/src/persistance')
 
 
 class GeneratorService:

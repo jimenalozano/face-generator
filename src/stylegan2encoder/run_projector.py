@@ -6,12 +6,12 @@
 
 import argparse
 import numpy as np
-from stylegan2encoder import dnnlib, dnnlib as tflib, pretrained_networks, projector
+from stylegan2encoder import dnnlib
+from src.stylegan2encoder import projector, pretrained_networks, dnnlib as tflib
 import re
 import sys
 
-from stylegan2encoder.training import dataset
-from stylegan2encoder.training import misc
+from src.stylegan2encoder.training import misc, dataset
 
 
 #----------------------------------------------------------------------------

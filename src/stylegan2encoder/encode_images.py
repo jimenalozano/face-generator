@@ -4,7 +4,6 @@ from tqdm import tqdm
 import PIL.Image
 import numpy as np
 
-import pretrained_networks
 from dnnlib import tflib
 from encoder.generator_model import Generator
 from encoder.perceptual_model import PerceptualModel

@@ -3,9 +3,8 @@ import os
 import shutil
 import numpy as np
 
-from stylegan2encoder import dataset_tool, pretrained_networks, projector
-from stylegan2encoder.training import dataset
-from stylegan2encoder.training import misc
+from src.stylegan2encoder import projector, dataset_tool, pretrained_networks
+from src.stylegan2encoder.training import misc, dataset
 
 
 def project_image(proj, src_file, dst_dir, tmp_dir, video=False):

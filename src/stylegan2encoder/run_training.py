@@ -9,10 +9,10 @@ import copy
 import os
 import sys
 
-from stylegan2encoder import dnnlib
-from stylegan2encoder.dnnlib import EasyDict
+from src.stylegan2encoder import dnnlib
+from src.stylegan2encoder.dnnlib import EasyDict
 
-from stylegan2encoder.metrics.metric_defaults import metric_defaults
+from src.stylegan2encoder.metrics import metric_defaults
 
 #----------------------------------------------------------------------------
 

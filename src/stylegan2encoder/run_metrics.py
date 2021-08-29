@@ -8,10 +8,11 @@ import argparse
 import os
 import sys
 
-from stylegan2encoder import dnnlib, dnnlib as tflib, pretrained_networks
+from stylegan2encoder import dnnlib
+from src.stylegan2encoder import pretrained_networks, dnnlib as tflib
 
-from stylegan2encoder.metrics import metric_base
-from stylegan2encoder.metrics.metric_defaults import metric_defaults
+from src.stylegan2encoder.metrics import metric_base
+from src.stylegan2encoder.metrics import metric_defaults
 
 #----------------------------------------------------------------------------
 

@@ -30,6 +30,8 @@ venv/
 */.stylegan2-cache/
 
 # Packages
-service/__pycache__
-generator/__pycache__
+src/service/__pycache__
+src/generator/__pycache__
 
+# Database
+src/persistance/generator_seeds.db

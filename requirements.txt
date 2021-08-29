@@ -6,3 +6,4 @@ keras==2.3.1
 dlib
 tqdm
 Flask==0.12.2
+gunicorn==19.9.0

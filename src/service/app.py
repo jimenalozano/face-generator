@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 
-import service
-from service import GeneratorService
+from src import service
+from src.service import GeneratorService
 
 app = Flask(__name__)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False

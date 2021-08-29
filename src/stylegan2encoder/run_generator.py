@@ -7,7 +7,8 @@
 import argparse
 import numpy as np
 import PIL.Image
-from stylegan2encoder import dnnlib, dnnlib as tflib, pretrained_networks
+from stylegan2encoder import dnnlib
+from src.stylegan2encoder import pretrained_networks, dnnlib as tflib
 import re
 import sys
 
