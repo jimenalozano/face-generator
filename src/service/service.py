@@ -2,7 +2,7 @@ from src.generator.generator import Generator
 
 from pathlib import Path
 import numpy as np
-from generator_seeds import GeneratorSeedsDb
+from src.service.generator_seeds import GeneratorSeedsDb
 
 home_path = str(Path.home())
 
