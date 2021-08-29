@@ -49,9 +49,9 @@ class Generator:
         self.sc.run_dir_root = path
         self.noise(seed=seed, path=path)
 
-    def generate_transition(self, seed_from, seed_to, steps, path):
+    def generate_transition(self, seed_from, seed_to, qty, speed, path):
         self.sc.run_dir_root = path
-        self.transition(seed_from=seed_from, seed_to=seed_to, steps=steps, path=path)
+        self.transition(seed_from=seed_from, seed_to=seed_to, qty=qty, speed=speed, path=path)
 
     @staticmethod
     def expand_seed(seeds, vector_size):
@@ -96,18 +96,18 @@ class Generator:
             image_path = f'{path}/image{seed_idx}.png'
             PIL.Image.fromarray(images[0], 'RGB').save(image_path)
 
-    def transition(self, seed_from, seed_to, steps, path):
+    def transition(self, seed_from, seed_to, qty, speed, path):
         # range(8192,8300)
         vector_size = self.Gs.input_shape[1:][0]
         seeds = Generator.expand_seed([seed_from, seed_to], vector_size)
         # generate_images(Gs, seeds,truncation_psi=0.5)
 
         diff = seeds[1] - seeds[0]
-        step = diff / steps
+        step = diff*speed / qty
         current = seeds[0].copy()
 
         seeds2 = []
-        for i in range(steps):
+        for i in range(qty):
             seeds2.append(current)
             current = current + step
 

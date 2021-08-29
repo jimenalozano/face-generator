@@ -30,7 +30,7 @@ def generate_random_images(qty: int):
     return database.fetch_all()
 
 
-def generate_transition(id_img1: int, id_img2: int = None, percentage: float = 1.0):
+def generate_transition(id_img1: int, id_img2: int = None, qty: int = 100, speed: float = 1.0):
 
     all_images = database.fetch_all()
 
@@ -50,7 +50,7 @@ def generate_transition(id_img1: int, id_img2: int = None, percentage: float = 1
         results_dir_root=home_path + '/face-generator/results',
         network_pkl='gdrive:networks/stylegan2-ffhq-config-f.pkl')
 
-    generator.generate_transition(seed_from=seed_1, seed_to=seed_2, steps=int(100*percentage),
+    generator.generate_transition(seed_from=seed_1, seed_to=seed_2, qty=qty, speed=speed,
                                        path=home_path + '/face-generator/results/transition')
 
 
