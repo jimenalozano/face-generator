@@ -1,6 +1,13 @@
-from src.stylegan2encoder import dnnlib
-from src.stylegan2encoder import pretrained_networks
-from src.stylegan2encoder.dnnlib import tflib
+import sys
+from pathlib import Path
+
+home_path = str(Path.home())
+
+sys.path.insert(0, f"${home_path}/face-generator/src/stylegan2encoder")
+
+import dnnlib
+import pretrained_networks
+from dnnlib import tflib
 
 import numpy as np
 import PIL.Image
