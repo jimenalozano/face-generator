@@ -1,2 +1,1 @@
-from . import generator
-from .generator import Generator
+from src.generator.generator import Generator
