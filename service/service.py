@@ -13,28 +13,24 @@ from generator_seeds import GeneratorSeedsDb
 class GeneratorService:
     def __init__(self):
         self.home_path = str(Path.home())
+        self.generator = Generator(
+            num_gpus=1,
+            results_dir_root=self.home_path + '/face-generator/results',
+            network_pkl='gdrive:networks/stylegan2-ffhq-config-f.pkl')
+
         self.db = GeneratorSeedsDb(self.home_path + '/face-generator/persistance')
 
     def get_ids(self):
         return self.db.fetch_all()
 
     def generate_random_images(self, qty: int):
-        generator = Generator(
-            num_gpus=1,
-            results_dir_root=self.home_path + '/face-generator/results',
-            network_pkl='gdrive:networks/stylegan2-ffhq-config-f.pkl')
         print("Generating random images.....")
         seed_from = np.random.randint(30000)
-        seeds = generator.generate_random_images(qty=qty, seed_from=seed_from, dlatents=False)
+        seeds = self.generator.generate_random_images(qty=qty, seed_from=seed_from, dlatents=False)
         self.db.insert_seeds(seeds=seeds)
         return self.db.fetch_all()
 
     def generate_transition(self, id_img1: int, id_img2: int = None, percentage: float = 1.0):
-
-        generator = Generator(
-            num_gpus=1,
-            results_dir_root=self.home_path + '/face-generator/results',
-            network_pkl='gdrive:networks/stylegan2-ffhq-config-f.pkl')
 
         all_images = self.db.fetch_all()
 
@@ -49,7 +45,7 @@ class GeneratorService:
         print("with seed 1 = " + seed_1)
         print("and seed 2 = " + seed_2)
 
-        generator.generate_transition(seed_from=seed_1, seed_to=seed_2, steps=int(100*percentage),
+        self.generator.generate_transition(seed_from=seed_1, seed_to=seed_2, steps=int(100*percentage),
                                            path=self.home_path + '/face-generator/results/transition')
 
 
