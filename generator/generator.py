@@ -51,7 +51,7 @@ class Generator:
 
     def generate_transition(self, seed_from, seed_to, qty, speed, path):
         self.sc.run_dir_root = path
-        self.transition(seed_from=seed_from, seed_to=seed_to, qty=qty, speed=speed, path=path, id_from=id_from)
+        self.transition(seed_from=seed_from, seed_to=seed_to, qty=qty, speed=speed, path=path)
 
     @staticmethod
     def expand_seed(seeds, vector_size):
@@ -62,7 +62,7 @@ class Generator:
             result.append(rnd.randn(1, vector_size))
         return result
 
-    def generate_images(self, seeds, truncation_psi, path, id_from):
+    def generate_images(self, seeds, truncation_psi, path, id_from = None):
 
         noise_vars = [var for name, var in \
                       self.Gs.components.synthesis.vars.items() \
@@ -93,10 +93,13 @@ class Generator:
             # for class labels (not used by StyleGAN). The remaining keyword arguments are optional and can be used
             # to further modify the operation. The output is a batch of images, whose format is dictated
             # by the output_transform argument. [minibatch, height, width, channel]
-            image_path = f'{path}/image{id_from+seed_idx}.png'
+            path_id = seed_idx
+            if id_from is not None:
+                path_id += id_from
+            image_path = f'{path}/image{path_id}.png'
             PIL.Image.fromarray(images[0], 'RGB').save(image_path)
 
-    def transition(self, seed_from, seed_to, qty, speed, path, id_from):
+    def transition(self, seed_from, seed_to, qty, speed, path):
         # range(8192,8300)
         vector_size = self.Gs.input_shape[1:][0]
         seeds = Generator.expand_seed([seed_from, seed_to], vector_size)
@@ -111,7 +114,7 @@ class Generator:
             seeds2.append(current)
             current = current + step
 
-        self.generate_images(seeds=seeds2, truncation_psi=0.5, path=path, id_from=id_from)
+        self.generate_images(seeds=seeds2, truncation_psi=0.5, path=path)
 
         # To view these generate images as a video file
         # ffmpeg -r 30 -i image%d.png -vcodec mpeg4 -y movie.mp4

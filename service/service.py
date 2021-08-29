@@ -63,7 +63,7 @@ def generate_transition(id_img1: int, id_img2: int = None, qty: int = 100, speed
         network_pkl='gdrive:networks/stylegan2-ffhq-config-f.pkl')
 
     generator.generate_transition(seed_from=seed_1, seed_to=seed_2, qty=qty, speed=speed,
-                                       path=home_path + '/face-generator/results/transition')
+                                  path=home_path + '/face-generator/results/transition')
 
 
 if __name__ == "__main__":
