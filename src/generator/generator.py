@@ -2,9 +2,9 @@ import sys
 
 sys.path.insert(0, "src/stylegan2encoder")
 
-from src.stylegan2encoder import dnnlib
-from src.stylegan2encoder import pretrained_networks
-from src.stylegan2encoder.dnnlib import tflib
+import dnnlib
+import pretrained_networks
+from dnnlib import tflib
 
 import numpy as np
 import PIL.Image

@@ -8,10 +8,10 @@
 
 import pickle
 
-
 #----------------------------------------------------------------------------
 # StyleGAN2 Google Drive root: https://drive.google.com/open?id=1QHc-yF5C3DChRwSdZKcx1w6K8JvSxQi7
-from src.stylegan2encoder.dnnlib import tflib, util
+import dnnlib
+from dnnlib import tflib
 
 gdrive_urls = {
     'gdrive:networks/stylegan2-car-config-a.pkl':                           'http://d36zk2xti64re0.cloudfront.net/stylegan2/networks/stylegan2-car-config-a.pkl',
@@ -66,8 +66,8 @@ def load_networks(path_or_gdrive_path):
     if path_or_url in _cached_networks:
         return _cached_networks[path_or_url]
 
-    if util.is_url(path_or_url):
-        stream = util.open_url(path_or_url, cache_dir='.stylegan2-cache')
+    if dnnlib.util.is_url(path_or_url):
+        stream = dnnlib.util.open_url(path_or_url, cache_dir='.stylegan2-cache')
     else:
         stream = open(path_or_url, 'rb')
 
