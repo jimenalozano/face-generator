@@ -10,7 +10,7 @@ import pickle
 
 #----------------------------------------------------------------------------
 # StyleGAN2 Google Drive root: https://drive.google.com/open?id=1QHc-yF5C3DChRwSdZKcx1w6K8JvSxQi7
-from dnnlib import tflib
+from src.stylegan2encoder.dnnlib import tflib
 
 gdrive_urls = {
     'gdrive:networks/stylegan2-car-config-a.pkl':                           'http://d36zk2xti64re0.cloudfront.net/stylegan2/networks/stylegan2-car-config-a.pkl',
