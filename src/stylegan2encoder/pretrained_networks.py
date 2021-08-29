@@ -7,6 +7,9 @@
 """List of pre-trained StyleGAN2 networks located on Google Drive."""
 
 import pickle
+import sys
+
+sys.path.append("dnnlib")
 
 #----------------------------------------------------------------------------
 # StyleGAN2 Google Drive root: https://drive.google.com/open?id=1QHc-yF5C3DChRwSdZKcx1w6K8JvSxQi7
