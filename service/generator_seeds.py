@@ -4,17 +4,11 @@ import sqlite3
 class GeneratorSeedsDb:
     def __init__(self, path: str):
         self.db_filename = path + '/generator_seeds.db'
+        self.create_sql_table_seeds()
 
-    def open(self):
+    def create_sql_table_seeds(self):
+
         connection = sqlite3.connect(self.db_filename)
-        GeneratorSeedsDb.create_sql_table_seeds(connection)
-        return connection
-
-    @staticmethod
-    def create_sql_table_seeds(connection):
-
-        if connection is None:
-            return
 
         connection.cursor().execute(
             "CREATE TABLE generator_seeds("
@@ -26,11 +20,9 @@ class GeneratorSeedsDb:
 
         connection.commit()
 
-    @staticmethod
-    def insert_seeds(connection, seeds: [int]):
+    def insert_seeds(self, seeds: [int]):
 
-        if connection is None:
-            return
+        connection = sqlite3.connect(self.db_filename)
 
         for seed in seeds:
             connection.cursor().execute(
@@ -39,8 +31,9 @@ class GeneratorSeedsDb:
 
         connection.commit()
 
-    @staticmethod
-    def fetch_id(connection, id: int):
+    def fetch_id(self, id: int):
+
+        connection = sqlite3.connect(self.db_filename)
 
         cursor = connection.cursor()
 
@@ -48,8 +41,9 @@ class GeneratorSeedsDb:
 
         return cursor.fetchall()
 
-    @staticmethod
-    def fetch_all(connection):
+    def fetch_all(self):
+
+        connection = sqlite3.connect(self.db_filename)
 
         cursor = connection.cursor()
 
