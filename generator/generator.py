@@ -27,7 +27,7 @@ class Generator:
         # _G = Instantaneous snapshot of the generator. Mainly useful for resuming a previous training run.
         # _D = Instantaneous snapshot of the discriminator. Mainly useful for resuming a previous training run.
         # Gs = Long-term average of the generator. Yields higher-quality results than the instantaneous snapshot.
-        dnnlib.tflib.init_tf()        
+        dnnlib.tflib.init_tf()
         self._G, self._D, self.Gs = pretrained_networks.load_networks(self.network_pkl)
         # The above code downloads the file and unpickles it to yield 3 instances of dnnlib.tflib.Network. To
         # generate images, you will typically want to use Gs – the other two networks are provided for completeness.

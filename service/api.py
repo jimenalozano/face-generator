@@ -4,6 +4,8 @@ from service import GeneratorService
 
 app = Flask(__name__)
 
+generatorService = GeneratorService()
+
 
 @app.route('/hello')
 def home():
@@ -18,7 +20,6 @@ def getFaces():
 
 @app.route('/faces', methods=['POST'])
 def generateFaces():
-
     amount = request.args.get('amount')
     if amount is not None:
         ids = generatorService.generate_random_images(int(amount))
@@ -39,6 +40,5 @@ def generateFaces():
 
 
 if __name__ == '__main__':
-    generatorService = GeneratorService()
     app.run('0.0.0.0', 5000)
 
