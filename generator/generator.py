@@ -64,8 +64,6 @@ class Generator:
 
     def generate_images(self, seeds, truncation_psi, path):
 
-        tf.reset_default_graph()
-
         noise_vars = [var for name, var in \
                       self.Gs.components.synthesis.vars.items() \
                       if name.startswith('noise')]

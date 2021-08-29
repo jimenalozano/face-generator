@@ -2,8 +2,6 @@ from flask import Flask, request, jsonify
 
 from service import GeneratorService
 
-generatorService = GeneratorService()
-
 app = Flask(__name__)
 
 
@@ -41,4 +39,6 @@ def generateFaces():
 
 
 if __name__ == '__main__':
+    generatorService = GeneratorService()
     app.run('0.0.0.0', 5000)
+

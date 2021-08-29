@@ -49,7 +49,7 @@ class GeneratorService:
                                            path=self.home_path + '/face-generator/results/transition')
 
 
-# if __name__ == "__main__":
-#     generatorService = GeneratorService()
-#     generatorService.generate_random_images(2)
-#     generatorService.generate_transition(11, 12)
+if __name__ == "__main__":
+        generatorService = GeneratorService()
+        generatorService.generate_random_images(2)
+        generatorService.generate_transition(11, 12)
