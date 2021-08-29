@@ -63,6 +63,9 @@ class Generator:
         return result
 
     def generate_images(self, seeds, truncation_psi, path):
+
+        dnnlib.tflib.init_tf()
+
         noise_vars = [var for name, var in \
                       self.Gs.components.synthesis.vars.items() \
                       if name.startswith('noise')]
