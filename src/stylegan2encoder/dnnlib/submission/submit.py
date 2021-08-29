@@ -21,6 +21,7 @@ import traceback
 
 from enum import Enum
 
+from .internal import local
 from .. import util
 from ... import dnnlib
 
@@ -100,7 +101,7 @@ class SubmitConfig(util.EasyDict):
         self.num_gpus = 1
         self.print_info = False
         self.nvprof = False
-        self.local = dnnlib.submission.internal.local.TargetOptions()
+        self.local = local.TargetOptions()
         self.datasets = []
 
         # (automatically populated)
@@ -319,7 +320,7 @@ def submit_run(submit_config: SubmitConfig, run_func_name: str, **run_func_kwarg
     submit_target = submit_config.submit_target
     farm = None
     if submit_target == SubmitTarget.LOCAL:
-        farm = dnnlib.submission.internal.local.Target()
+        farm = local.Target()
     assert farm is not None  # unknown target
 
     # Disallow submitting jobs with zero num_gpus.
