@@ -1,9 +1,4 @@
-import sys
-
-sys.path.insert(0, "../generator")
-sys.path.insert(0, "../persistance")
-
-from src.generator import Generator
+from src.generator.generator import Generator
 
 from pathlib import Path
 import numpy as np
