@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 
-from service.service import GeneratorService
+from service import GeneratorService
 
 generatorService = GeneratorService()
 
