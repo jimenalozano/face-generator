@@ -30,7 +30,8 @@ venv/
 */.stylegan2-cache/
 
 # Packages
-*/__pycache__/
+*.pyc
+*.pyo
 
 # Database
 src/persistance/generator_seeds.db
