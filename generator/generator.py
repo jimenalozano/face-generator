@@ -34,7 +34,7 @@ class Generator:
         # In order for pickle.load() to work, you will need to have the dnnlib source directory in your PYTHONPATH
         # and a tf.Session set as default. The session can initialized by calling dnnlib.tflib.init_tf().
 
-    def generate_random_images(self, qty: int, seed_from: int, dlatents: bool):
+    def generate_random_images(self, qty: int, seed_from: int, dlatents: bool, id_from: int):
 
         vector_size = self.Gs.input_shape[1:][0]
         seeds = Generator.expand_seed(range(seed_from, seed_from + qty), vector_size)
@@ -42,16 +42,16 @@ class Generator:
         if dlatents:
             return self.get_dlatents(range(seed_from, seed_from + qty), truncation_psi=0.5, path=self.results_dir_root)
 
-        self.generate_images(seeds, truncation_psi=0.5, path=self.results_dir_root)
+        self.generate_images(seeds, truncation_psi=0.5, path=self.results_dir_root, id_from=id_from)
         return range(seed_from, seed_from + qty)
 
     def generate_noise(self, seed, path):
         self.sc.run_dir_root = path
         self.noise(seed=seed, path=path)
 
-    def generate_transition(self, seed_from, seed_to, steps, path):
+    def generate_transition(self, seed_from, seed_to, qty, speed, path):
         self.sc.run_dir_root = path
-        self.transition(seed_from=seed_from, seed_to=seed_to, steps=steps, path=path)
+        self.transition(seed_from=seed_from, seed_to=seed_to, qty=qty, speed=speed, path=path)
 
     @staticmethod
     def expand_seed(seeds, vector_size):
@@ -62,7 +62,7 @@ class Generator:
             result.append(rnd.randn(1, vector_size))
         return result
 
-    def generate_images(self, seeds, truncation_psi, path):
+    def generate_images(self, seeds, truncation_psi, path, id_from = None):
 
         noise_vars = [var for name, var in \
                       self.Gs.components.synthesis.vars.items() \
@@ -93,25 +93,28 @@ class Generator:
             # for class labels (not used by StyleGAN). The remaining keyword arguments are optional and can be used
             # to further modify the operation. The output is a batch of images, whose format is dictated
             # by the output_transform argument. [minibatch, height, width, channel]
-            image_path = f'{path}/image{seed_idx}.png'
+            path_id = seed_idx
+            if id_from is not None:
+                path_id += id_from
+            image_path = f'{path}/image{path_id}.png'
             PIL.Image.fromarray(images[0], 'RGB').save(image_path)
 
-    def transition(self, seed_from, seed_to, steps, path):
+    def transition(self, seed_from, seed_to, qty, speed, path):
         # range(8192,8300)
         vector_size = self.Gs.input_shape[1:][0]
         seeds = Generator.expand_seed([seed_from, seed_to], vector_size)
         # generate_images(Gs, seeds,truncation_psi=0.5)
 
         diff = seeds[1] - seeds[0]
-        step = diff / steps
+        step = diff*speed / qty
         current = seeds[0].copy()
 
         seeds2 = []
-        for i in range(steps):
+        for i in range(qty):
             seeds2.append(current)
             current = current + step
 
-        self.generate_images(seeds2, truncation_psi=0.5, path=path)
+        self.generate_images(seeds=seeds2, truncation_psi=0.5, path=path)
 
         # To view these generate images as a video file
         # ffmpeg -r 30 -i image%d.png -vcodec mpeg4 -y movie.mp4
