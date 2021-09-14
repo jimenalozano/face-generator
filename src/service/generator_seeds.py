@@ -8,6 +8,7 @@ class GeneratorSeedsDb:
 
     def create_sql_table_seeds(self):
 
+        print("Connecting to database at: " + self.db_filename)
         connection = sqlite3.connect(self.db_filename)
 
         connection.cursor().execute(

@@ -6,7 +6,7 @@ from src.service.generator_seeds import GeneratorSeedsDb
 
 home_path = str(Path.home())
 
-database = GeneratorSeedsDb(home_path + '/face-generator/src/persistance')
+database = GeneratorSeedsDb('/face-generator/src/persistance')
 
 
 class GeneratorService:

@@ -1,6 +1,6 @@
 import sys
 
-sys.path.insert(0, "../stylegan2encoder")
+sys.path.insert(0, "/face-generator/src/stylegan2encoder")
 
 import os
 import PIL.Image
