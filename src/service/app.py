@@ -1,9 +1,11 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 
 from src.service.service import GeneratorService
 
 app = Flask(__name__)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
+CORS(app)
 
 service = GeneratorService()
 
@@ -35,12 +37,15 @@ def generateFaces():
         ids = service.generate_random_images(int(amount))
         return jsonify({'ids': ids})
 
-    if amount is not None and id1 is not None and speed is not None:
+    if amount is not None and id1 is not None:
         id1 = int(id1)
+        amount = int(amount)
+
         if id2 is not None:
             id2 = int(id2)
-        speed = float(speed)
-        amount = int(amount)
+        if speed is not None:
+            speed = float(speed)
+        
         service.generate_transition(id1, id2, amount, speed)
         return jsonify({'msg': "OK", 'code': 200})
 

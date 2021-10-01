@@ -1,1 +1,2 @@
-gunicorn --bind 0.0.0.0:5000 --workers 2 --timeout 4800 face_generator:app
+#!/bin/bash
+/home/jilozano/.local/bin/gunicorn --bind 0.0.0.0:5000 --workers 2 --timeout 4800 face_generator:app

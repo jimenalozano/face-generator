@@ -6,4 +6,5 @@ requests==2.22.0
 keras==2.3.1
 tqdm
 Flask==0.12.2
+flask-cors
 gunicorn==19.9.0
