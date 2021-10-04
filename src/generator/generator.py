@@ -100,17 +100,18 @@ class Generator:
             PIL.Image.fromarray(images[0], 'RGB').save(image_path)
 
     def transition(self, seed_from, seed_to, qty, speed, path):
-        # range(8192,8300)
+
         vector_size = self.Gs.input_shape[1:][0]
         seeds = Generator.expand_seed([seed_from, seed_to], vector_size)
-        # generate_images(Gs, seeds,truncation_psi=0.5)
 
         diff = seeds[1] - seeds[0]
         step = diff*speed / qty
         current = seeds[0].copy()
 
         seeds2 = []
+        print("seeds of transition: ")
         for i in range(qty):
+            print(current)
             seeds2.append(current)
             current = current + step
 
