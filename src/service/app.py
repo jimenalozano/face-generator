@@ -10,6 +10,7 @@ CORS(app)
 service = GeneratorService()
 
 
+
 @app.route('/hello')
 def home():
     return jsonify({'msg': 'hello! :)'})
@@ -28,6 +29,7 @@ def generateFaces():
     id1 = request.args.get('id1')
     id2 = request.args.get('id2')
     speed = request.args.get('speed')
+
 
     if id is not None and amount is None and id1 is None and speed is None:
         ids = service.generate_face(int(id))

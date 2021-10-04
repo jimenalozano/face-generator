@@ -1,6 +1,8 @@
 import sys
+from pathlib import Path
 
-sys.path.insert(0, "/home/jilozano/face-generator/src/stylegan2encoder")
+home_path = str(Path.home())
+sys.path.insert(0, home_path + "/face-generator/src/stylegan2encoder")
 
 import dnnlib
 import pretrained_networks
@@ -111,7 +113,6 @@ class Generator:
         seeds2 = []
         print("seeds of transition: ")
         for i in range(qty):
-            print(current)
             seeds2.append(current)
             current = current + step
 
