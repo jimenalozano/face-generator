@@ -30,11 +30,11 @@ def generateFaces():
     id2 = request.args.get('id2')
     speed = request.args.get('speed')
 
-    if id is not None and amount is None and id1 is None and speed is None:
+    if id is not None and amount is None and id1 is None:
         id = service.generate_face(int(id))
         return jsonify({'id': id})
 
-    if amount is not None and id is None and id1 is None and speed is None:
+    if amount is not None and id is None and id1 is None:
         ids = service.generate_random_images(int(amount))
         return jsonify({'ids': ids})
 
