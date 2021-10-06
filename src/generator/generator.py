@@ -1,5 +1,5 @@
 import sys
-from os import mkdir
+from os import mkdir, path
 from pathlib import Path
 
 home_path = str(Path.home())
@@ -45,7 +45,7 @@ class Generator:
         if dlatents:
             return self.get_dlatents(range(seed_from, seed_from + qty), truncation_psi=0.5, path=self.results_dir_root)
 
-        self.generate_images(seeds, truncation_psi=0.5, path=self.results_dir_root, id_from=id_from)
+        self.generate_images(seeds, truncation_psi=0.5, path_dir=self.results_dir_root, id_from=id_from)
         return range(seed_from, seed_from + qty)
 
     def generate_noise(self, seed, path):
@@ -71,10 +71,10 @@ class Generator:
             result.append(rnd.randn(1, vector_size))
         return result
 
-    def generate_images(self, seeds, truncation_psi, path, id_from=None):
+    def generate_images(self, seeds, truncation_psi, path_dir, id_from=None):
 
-        if not path.isdir(path):
-            mkdir(path)
+        if not path.isdir(path_dir):
+            mkdir(path_dir)
 
         noise_vars = [var for name, var in \
                       self.Gs.components.synthesis.vars.items() \
@@ -108,7 +108,7 @@ class Generator:
             path_id = seed_idx
             if id_from is not None:
                 path_id += id_from
-            image_path = f'{path}/image{path_id}.png'
+            image_path = f'{path_dir}/image{path_id}.png'
             PIL.Image.fromarray(images[0], 'RGB').save(image_path)
 
     def transition(self, path, seed_from, seed_to, qty, speed=1.0):
@@ -127,7 +127,7 @@ class Generator:
             seeds2.append(current)
             current = current + step
 
-        self.generate_images(seeds=seeds2, truncation_psi=0.5, path=path)
+        self.generate_images(seeds=seeds2, truncation_psi=0.5, path_dir=path)
 
         # To view these generate images as a video file
         # ffmpeg -r 30 -i image%d.png -vcodec mpeg4 -y movie.mp4
@@ -135,7 +135,7 @@ class Generator:
     def noise(self, seed, path):
         vector_size = self.Gs.input_shape[1:][0]
         seeds = Generator.expand_seed([seed, seed, seed, seed, seed], vector_size)
-        self.generate_images(seeds, truncation_psi=0.5, path=path)
+        self.generate_images(seeds, truncation_psi=0.5, path_dir=path)
 
     def get_dlatents(self, seeds, truncation_psi, path):
         Gs_kwargs = dnnlib.EasyDict()
