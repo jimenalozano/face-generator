@@ -1,4 +1,5 @@
 import sys
+from os import mkdir
 from pathlib import Path
 
 home_path = str(Path.home())
@@ -70,7 +71,10 @@ class Generator:
             result.append(rnd.randn(1, vector_size))
         return result
 
-    def generate_images(self, seeds, truncation_psi, path, id_from = None):
+    def generate_images(self, seeds, truncation_psi, path, id_from=None):
+
+        if not path.isdir(path):
+            mkdir(path)
 
         noise_vars = [var for name, var in \
                       self.Gs.components.synthesis.vars.items() \
@@ -90,7 +94,7 @@ class Generator:
             Gs_kwargs.truncation_psi = truncation_psi
 
         for seed_idx, seed in enumerate(seeds):
-            print('Generating image for seed %d/%d ...' % (seed_idx+1, len(seeds)))
+            print('Generating image for seed %d/%d ...' % (seed_idx + 1, len(seeds)))
             rnd = np.random.RandomState()
             tflib.set_vars({var: rnd.randn(*var.shape.as_list()) for var in noise_vars})  # [height, width]
 
@@ -114,7 +118,7 @@ class Generator:
 
         diff = seeds[1] - seeds[0]
 
-        step = diff*speed / qty
+        step = diff * speed / qty
 
         current = seeds[0].copy()
 
