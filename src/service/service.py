@@ -52,7 +52,7 @@ class GeneratorService:
             id_img2 = all_images[np.random.randint(len(all_images))][0]
 
         now = datetime.datetime.now()
-        now = now.strftime("%d/%m/%Y-%H:%M:%S")
+        now = now.strftime("%d-%m-%Y-%H:%M:%S")
 
         print("Generating transition at " + now
               + " from image #" + str(id_img1) + " to image #" + str(id_img2))
@@ -65,5 +65,5 @@ class GeneratorService:
             seed_to=seed_2,
             qty=qty,
             speed=speed,
-            path=home_path + '/face-generator/results/transitions/' + now
+            path=home_path + '/face-generator/results/transitions/transition' + now
         )
