@@ -43,7 +43,7 @@ class GeneratorService:
             id_from=last_id + 1
         )
         database.insert_seeds(seeds=seeds)
-        return database.fetch_seeds(seeds)
+        return range(last_id + 1, last_id + 1 + qty)
 
     def generate_transition(self, id_img1: int, id_img2: int = None, qty: int = 100, speed: float = 1.0):
         all_images = database.fetch_all()
