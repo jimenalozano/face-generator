@@ -51,10 +51,10 @@ class GeneratorService:
         while id_img2 is None or id_img2 == id_img1:
             id_img2 = all_images[np.random.randint(len(all_images))][0]
 
-        date = datetime.date
-        timestamp = str(date)
+        now = datetime.datetime.now()
+        now = now.strftime("%d/%m/%Y %H:%M:%S")
 
-        print("Generating transition at " + timestamp
+        print("Generating transition at " + now
               + " from image #" + str(id_img1) + " to image #" + str(id_img2))
 
         seed_1 = database.fetch_id(id=id_img1)[0][0]
@@ -65,5 +65,5 @@ class GeneratorService:
             seed_to=seed_2,
             qty=qty,
             speed=speed,
-            path=home_path + '/face-generator/results/transitions/' + timestamp
+            path=home_path + '/face-generator/results/transitions/' + now
         )
