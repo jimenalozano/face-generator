@@ -53,7 +53,13 @@ class Generator:
 
     def generate_transition(self, seed_from, seed_to, qty, speed, path):
         self.sc.run_dir_root = path
-        self.transition(seed_from=seed_from, seed_to=seed_to, qty=qty, speed=speed, path=path)
+        self.transition(
+            seed_from=seed_from,
+            seed_to=seed_to,
+            qty=qty,
+            speed=speed,
+            path=path
+        )
 
     @staticmethod
     def expand_seed(seeds, vector_size):
@@ -84,7 +90,7 @@ class Generator:
             Gs_kwargs.truncation_psi = truncation_psi
 
         for seed_idx, seed in enumerate(seeds):
-            print('Generating image for seed %d/%d ...' % (seed_idx, len(seeds)))
+            print('Generating image for seed %d/%d ...' % (seed_idx+1, len(seeds)))
             rnd = np.random.RandomState()
             tflib.set_vars({var: rnd.randn(*var.shape.as_list()) for var in noise_vars})  # [height, width]
 
@@ -101,17 +107,18 @@ class Generator:
             image_path = f'{path}/image{path_id}.png'
             PIL.Image.fromarray(images[0], 'RGB').save(image_path)
 
-    def transition(self, seed_from, seed_to, qty, speed, path):
+    def transition(self, path, seed_from, seed_to, qty, speed=1.0):
 
         vector_size = self.Gs.input_shape[1:][0]
         seeds = Generator.expand_seed([seed_from, seed_to], vector_size)
 
         diff = seeds[1] - seeds[0]
+
         step = diff*speed / qty
+
         current = seeds[0].copy()
 
         seeds2 = []
-        print("seeds of transition: ")
         for i in range(qty):
             seeds2.append(current)
             current = current + step

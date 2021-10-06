@@ -1,5 +1,5 @@
 from src.generator.generator import Generator
-
+import datetime
 from pathlib import Path
 import numpy as np
 from src.service.generator_seeds import GeneratorSeedsDb
@@ -22,7 +22,7 @@ class GeneratorService:
         return database.fetch_all()
 
     def generate_face(self, id: int):
-        print("Generating random images.....")
+        print("Generating image .....")
         seed = database.fetch_id(id=id)[0][0]
         self.generator.generate_random_images(
             qty=1,
@@ -30,7 +30,7 @@ class GeneratorService:
             dlatents=False,
             id_from=id
         )
-        return database.fetch_all()
+        return [id]
 
     def generate_random_images(self, qty: int):
         print("Generating random images.....")
@@ -43,7 +43,7 @@ class GeneratorService:
             id_from=last_id + 1
         )
         database.insert_seeds(seeds=seeds)
-        return database.fetch_all()
+        return database.fetch_seeds(seeds)
 
     def generate_transition(self, id_img1: int, id_img2: int = None, qty: int = 100, speed: float = 1.0):
         all_images = database.fetch_all()
@@ -51,18 +51,19 @@ class GeneratorService:
         while id_img2 is None or id_img2 == id_img1:
             id_img2 = all_images[np.random.randint(len(all_images))][0]
 
-        print("Generating transition from image #" + str(id_img1) + " to image #" + str(id_img2))
+        date = datetime.date
+        str_timestamp = datetime.strptime(str(date), '%Y-%m-%d %H:%M:%S')
+
+        print("Generating transition at " + str_timestamp
+              + " from image #" + str(id_img1) + " to image #" + str(id_img2))
 
         seed_1 = database.fetch_id(id=id_img1)[0][0]
         seed_2 = database.fetch_id(id=id_img2)[0][0]
-
-        print("with seed 1 = " + str(seed_1))
-        print("and seed 2 = " + str(seed_2))
 
         self.generator.generate_transition(
             seed_from=seed_1,
             seed_to=seed_2,
             qty=qty,
             speed=speed,
-            path=home_path + '/face-generator/results/transition'
+            path=home_path + '/face-generator/results/transitions/' + str_timestamp
         )

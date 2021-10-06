@@ -52,6 +52,15 @@ class GeneratorSeedsDb:
 
         return cursor.fetchall()
 
+    def fetch_seeds(self, seeds):
+        connection = sqlite3.connect(self.db_filename)
+
+        cursor = connection.cursor()
+
+        cursor.execute('SELECT * FROM generator_seeds WHERE seed IN seeds', (seeds,))
+
+        return cursor.fetchall()
+
 
 # if __name__ == '__main__':
 #
