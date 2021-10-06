@@ -43,7 +43,7 @@ class GeneratorService:
             id_from=last_id + 1
         )
         database.insert_seeds(seeds=seeds)
-        return [i for i in range(last_id + 1, last_id + 1 + qty)]
+        return [[seed_idx + last_id + 1, seed] for seed_idx, seed in enumerate(seeds)]
 
     def generate_transition(self, id_img1: int, id_img2: int = None, qty: int = 100, speed: float = 1.0):
         all_images = database.fetch_all()
@@ -52,9 +52,9 @@ class GeneratorService:
             id_img2 = all_images[np.random.randint(len(all_images))][0]
 
         date = datetime.date
-        str_timestamp = datetime.strptime(str(date), '%Y-%m-%d %H:%M:%S')
+        timestamp = datetime.datetime.strptime(str(date), '%Y-%m-%d %H:%M:%S')
 
-        print("Generating transition at " + str_timestamp
+        print("Generating transition at " + str(timestamp)
               + " from image #" + str(id_img1) + " to image #" + str(id_img2))
 
         seed_1 = database.fetch_id(id=id_img1)[0][0]
@@ -65,5 +65,5 @@ class GeneratorService:
             seed_to=seed_2,
             qty=qty,
             speed=speed,
-            path=home_path + '/face-generator/results/transitions/' + str_timestamp
+            path=home_path + '/face-generator/results/transitions/' + str(timestamp)
         )
