@@ -1,6 +1,8 @@
 import sys
+from pathlib import Path
 
-sys.path.insert(0, "/face-generator/src/stylegan2encoder")
+home_path = str(Path.home())
+sys.path.insert(0, home_path + "/face-generator/src/stylegan2encoder")
 
 import os
 import PIL.Image
@@ -88,16 +90,14 @@ class LatentSpace:
         direction = np.load(LATENT_DIRECTIONS_PATH + direction_file)
         os.makedirs(GENERATED_IMAGES_PATH + direction_file.split('.')[0], exist_ok=True)
         for i, coeff in enumerate(coeffs):
-            for j in range(5):
-                new_latent_vector = latent_vector.copy()
-                new_latent_vector[0][:8] = (latent_vector[0] + (coeff + j * 0.2) * direction)[:8]
-                images = self.generator.Gs.components.synthesis.run(new_latent_vector, **self.Gs_syn_kwargs)
-                result = PIL.Image.fromarray(images[0], 'RGB')
-                result.thumbnail(self.size, PIL.Image.ANTIALIAS)
-                result.save(GENERATED_IMAGES_PATH + direction_file.split('.')[0] + '/' + str(coeff) + '.' + str(j) +
-                            '.png')
-                if len(coeffs) == 1:
-                    return result
+            new_latent_vector = latent_vector.copy()
+            new_latent_vector[0][:8] = (latent_vector[0] + coeff * direction)[:8]
+            images = self.generator.Gs.components.synthesis.run(new_latent_vector, **self.Gs_syn_kwargs)
+            result = PIL.Image.fromarray(images[0], 'RGB')
+            result.thumbnail(self.size, PIL.Image.ANTIALIAS)
+            result.save(GENERATED_IMAGES_PATH + direction_file.split('.')[0] + '/' + str(coeff) + '.png')
+            if len(coeffs) == 1:
+                return result
 
 
 if __name__ == '__main__':
@@ -116,43 +116,18 @@ if __name__ == '__main__':
     # Paso 3: modificar la imagen
     # @attribute from Adjustment enum
     # @intensity [-20, 20] with step = 0.2
-    latentSpace.modify_face(Adjustment.AGE.value, -2, False)
-    latentSpace.modify_face(Adjustment.AGE.value, -2.2, False)
-    latentSpace.modify_face(Adjustment.AGE.value, -2.4, False)
-    latentSpace.modify_face(Adjustment.AGE.value, -2.6, False)
-    latentSpace.modify_face(Adjustment.AGE.value, -2.8, False)
-    latentSpace.modify_face(Adjustment.AGE.value, -1, False)
-    latentSpace.modify_face(Adjustment.AGE.value, -1.2, False)
-    latentSpace.modify_face(Adjustment.AGE.value, -1.4, False)
-    latentSpace.modify_face(Adjustment.AGE.value, -1.6, False)
-    latentSpace.modify_face(Adjustment.AGE.value, -1.8, False)
-    latentSpace.modify_face(Adjustment.AGE.value, 1, False)
-    latentSpace.modify_face(Adjustment.AGE.value, 1.2, False)
-    latentSpace.modify_face(Adjustment.AGE.value, 1.4, False)
-    latentSpace.modify_face(Adjustment.AGE.value, 1.6, False)
-    latentSpace.modify_face(Adjustment.AGE.value, 1.8, False)
-    latentSpace.modify_face(Adjustment.AGE.value, 2, False)
-    latentSpace.modify_face(Adjustment.AGE.value, 2.2, False)
-    latentSpace.modify_face(Adjustment.AGE.value, 2.4, False)
-    latentSpace.modify_face(Adjustment.AGE.value, 2.6, False)
-    latentSpace.modify_face(Adjustment.AGE.value, 2.8, False)
 
-    latentSpace.modify_face(Adjustment.GENDER.value, -2, False)
-    latentSpace.modify_face(Adjustment.GENDER.value, -2.2, False)
-    latentSpace.modify_face(Adjustment.GENDER.value, -2.4, False)
-    latentSpace.modify_face(Adjustment.GENDER.value, -2.6, False)
-    latentSpace.modify_face(Adjustment.GENDER.value, -2.8, False)
-    latentSpace.modify_face(Adjustment.GENDER.value, -1, False)
-    latentSpace.modify_face(Adjustment.GENDER.value, -1.2, False)
-    latentSpace.modify_face(Adjustment.GENDER.value, -1.4, False)
-    latentSpace.modify_face(Adjustment.GENDER.value, -1.6, False)
-    latentSpace.modify_face(Adjustment.GENDER.value, -1.8, False)
-    latentSpace.modify_face(Adjustment.GENDER.value, 1.2, False)
-    latentSpace.modify_face(Adjustment.GENDER.value, 1.4, False)
-    latentSpace.modify_face(Adjustment.GENDER.value, 1.6, False)
-    latentSpace.modify_face(Adjustment.GENDER.value, 1.8, False)
-    latentSpace.modify_face(Adjustment.GENDER.value, 2, False)
-    latentSpace.modify_face(Adjustment.GENDER.value, 2.2, False)
-    latentSpace.modify_face(Adjustment.GENDER.value, 2.4, False)
-    latentSpace.modify_face(Adjustment.GENDER.value, 2.6, False)
-    latentSpace.modify_face(Adjustment.GENDER.value, 2.8, False)
+    latentSpace.modify_face(Adjustment.AGE.value, 5, False)
+    latentSpace.modify_face(Adjustment.AGE.value, 10, False)
+    latentSpace.modify_face(Adjustment.AGE.value, -5, False)
+    latentSpace.modify_face(Adjustment.AGE.value, -10, False)
+
+    latentSpace.modify_face(Adjustment.GENDER.value, 5, False)
+    latentSpace.modify_face(Adjustment.GENDER.value, 10, False)
+    latentSpace.modify_face(Adjustment.GENDER.value, -5, False)
+    latentSpace.modify_face(Adjustment.GENDER.value, -10, False)
+
+    latentSpace.modify_face(Adjustment.EYES_OPEN.value, 5, False)
+    latentSpace.modify_face(Adjustment.EYES_OPEN.value, 10, False)
+    latentSpace.modify_face(Adjustment.EYES_OPEN.value, -5, False)
+    latentSpace.modify_face(Adjustment.EYES_OPEN.value, -10, False)
