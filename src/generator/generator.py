@@ -118,7 +118,7 @@ class Generator:
 
         diff = seeds[1] - seeds[0]
 
-        step = diff * speed / qty
+        step = diff * speed / (qty - 1) 
 
         current = seeds[0].copy()
 
