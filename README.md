@@ -3,6 +3,12 @@ Face Generation Tool for Memory Experimentation
 
 ### Set up
 
+Clone repository at home directory:
+```bash
+cd $HOME
+git clone https://github.com/jimenalozano/face-generator.git
+```
+ 
 Install virtualenv to keep all your dependencies in one place.
 ```bash
 sudo apt-get install virtualenv
@@ -22,17 +28,14 @@ pip install -r requirements.txt
 ```
 Check hardware requirements are OK
 ```bash
-python cli/cli.py
+python cli.py
 ```
 Finally, you are ready to go! Run the face generator services from:
 ```bash
-cd service
-python service.py
+cd $HOME/face-generator 
+./run.sh
 ```
-
-Notice that, if you dont have the database, you should uncomment line 24 of service.py to create the table needed to store the seeds of every face generated. In that way you can later use the transition service, by choosing the images from the database.
-
-You can see the results at face-generator/results/
+You can see the results at $HOME/face-generator/results/
 
 Once you are all done, get out of the virtual environment by running
 ```bash

@@ -10,7 +10,7 @@ import dnnlib
 import dnnlib.tflib as tflib
 from enum import Enum
 import numpy as np
-from src.generator import Generator
+from generator import Generator
 from align_images import align_images
 from encode_images import encode_images
 
@@ -103,7 +103,7 @@ class LatentSpace:
 if __name__ == '__main__':
     generator = Generator(1, 'latent-space/raw-images', 'gdrive:networks/stylegan2-ffhq-config-f.pkl')
     latentSpace = LatentSpace(generator)
-    generator.generate_random_images(qty=1, seed_from=8006, dlatents=False)
+    generator.generate_random_images(qty=1, seed_from=8006, id_from=1, dlatents=False)
 
     # Paso 1: cargar las imágenes en la carpeta RAW y hacer el crop (alinearla)
     latentSpace.align_faces()
